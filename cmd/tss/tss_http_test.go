@@ -11,7 +11,7 @@ import (
 
 	. "gopkg.in/check.v1"
 
-	"gitlab.com/akil27/moneroTss/monero_multi_sig/keygen"
+	"github.com/akildemir/moneroTss/monero_multi_sig/keygen"
 )
 
 func TestPackage(t *testing.T) { TestingT(t) }

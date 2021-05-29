@@ -16,14 +16,14 @@ import (
 	"github.com/rs/zerolog/log"
 	tcrypto "github.com/tendermint/tendermint/crypto"
 
-	"gitlab.com/akil27/moneroTss/common"
-	"gitlab.com/akil27/moneroTss/conversion"
-	"gitlab.com/akil27/moneroTss/messages"
-	moneroKeyGen "gitlab.com/akil27/moneroTss/monero_multi_sig/keygen"
-	moneroKeySign "gitlab.com/akil27/moneroTss/monero_multi_sig/keysign"
-	"gitlab.com/akil27/moneroTss/monitor"
-	"gitlab.com/akil27/moneroTss/p2p"
-	"gitlab.com/akil27/moneroTss/storage"
+	"github.com/akildemir/moneroTss/common"
+	"github.com/akildemir/moneroTss/conversion"
+	"github.com/akildemir/moneroTss/messages"
+	moneroKeyGen "github.com/akildemir/moneroTss/monero_multi_sig/keygen"
+	moneroKeySign "github.com/akildemir/moneroTss/monero_multi_sig/keysign"
+	"github.com/akildemir/moneroTss/monitor"
+	"github.com/akildemir/moneroTss/p2p"
+	"github.com/akildemir/moneroTss/storage"
 )
 
 // TssServer is the structure that can provide all keysign and key gen features

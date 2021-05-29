@@ -10,7 +10,7 @@ import (
 	"github.com/libp2p/go-libp2p-core/crypto"
 	. "gopkg.in/check.v1"
 
-	"gitlab.com/akil27/moneroTss/messages"
+	"github.com/akildemir/moneroTss/messages"
 )
 
 type CommunicationTestSuite struct{}

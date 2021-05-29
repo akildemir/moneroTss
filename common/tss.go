@@ -15,10 +15,10 @@ import (
 	tcrypto "github.com/tendermint/tendermint/crypto"
 	"github.com/tendermint/tendermint/crypto/secp256k1"
 
-	"gitlab.com/akil27/moneroTss/blame"
-	"gitlab.com/akil27/moneroTss/conversion"
-	"gitlab.com/akil27/moneroTss/messages"
-	"gitlab.com/akil27/moneroTss/p2p"
+	"github.com/akildemir/moneroTss/blame"
+	"github.com/akildemir/moneroTss/conversion"
+	"github.com/akildemir/moneroTss/messages"
+	"github.com/akildemir/moneroTss/p2p"
 )
 
 // PartyInfo the information used by tss key gen and key sign

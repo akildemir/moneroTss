@@ -13,8 +13,8 @@ import (
 	"github.com/stretchr/testify/assert"
 	moneroWallet "gitlab.com/thorchain/tss/monero-wallet-rpc/wallet"
 
-	"gitlab.com/akil27/moneroTss/conversion"
-	"gitlab.com/akil27/moneroTss/p2p"
+	"github.com/akildemir/moneroTss/conversion"
+	"github.com/akildemir/moneroTss/p2p"
 )
 
 func TestSignatureNotifierHappyPath(t *testing.T) {

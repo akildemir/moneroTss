@@ -17,8 +17,8 @@ import (
 	"github.com/rs/zerolog/log"
 	"gitlab.com/thorchain/tss/monero-wallet-rpc/wallet"
 
-	"gitlab.com/akil27/moneroTss/messages"
-	"gitlab.com/akil27/moneroTss/p2p"
+	"github.com/akildemir/moneroTss/messages"
+	"github.com/akildemir/moneroTss/p2p"
 )
 
 var signatureNotifierProtocol protocol.ID = "/p2p/signatureNotifier"

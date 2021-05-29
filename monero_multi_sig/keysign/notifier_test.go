@@ -6,7 +6,7 @@ import (
 	moneroWallet "gitlab.com/thorchain/tss/monero-wallet-rpc/wallet"
 	. "gopkg.in/check.v1"
 
-	"gitlab.com/akil27/moneroTss/conversion"
+	"github.com/akildemir/moneroTss/conversion"
 )
 
 type NotifierTestSuite struct{}

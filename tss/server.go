@@ -1,8 +1,8 @@
 package tss
 
 import (
-	"gitlab.com/akil27/moneroTss/monero_multi_sig/keygen"
-	"gitlab.com/akil27/moneroTss/monero_multi_sig/keysign"
+	"github.com/akildemir/moneroTss/monero_multi_sig/keygen"
+	"github.com/akildemir/moneroTss/monero_multi_sig/keysign"
 )
 
 // Server define the necessary functionality should be provide by a TSS Server implementation

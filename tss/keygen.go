@@ -3,11 +3,11 @@ package tss
 import (
 	"time"
 
-	"gitlab.com/akil27/moneroTss/blame"
-	"gitlab.com/akil27/moneroTss/common"
-	"gitlab.com/akil27/moneroTss/conversion"
-	"gitlab.com/akil27/moneroTss/messages"
-	"gitlab.com/akil27/moneroTss/monero_multi_sig/keygen"
+	"github.com/akildemir/moneroTss/blame"
+	"github.com/akildemir/moneroTss/common"
+	"github.com/akildemir/moneroTss/conversion"
+	"github.com/akildemir/moneroTss/messages"
+	"github.com/akildemir/moneroTss/monero_multi_sig/keygen"
 )
 
 func (t *TssServer) Keygen(req keygen.Request) (keygen.Response, error) {

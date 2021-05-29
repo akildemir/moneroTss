@@ -20,10 +20,10 @@ import (
 	"gitlab.com/thorchain/tss/monero-wallet-rpc/wallet"
 	. "gopkg.in/check.v1"
 
-	"gitlab.com/akil27/moneroTss/common"
-	"gitlab.com/akil27/moneroTss/conversion"
-	"gitlab.com/akil27/moneroTss/monero_multi_sig/keygen"
-	"gitlab.com/akil27/moneroTss/monero_multi_sig/keysign"
+	"github.com/akildemir/moneroTss/common"
+	"github.com/akildemir/moneroTss/conversion"
+	"github.com/akildemir/moneroTss/monero_multi_sig/keygen"
+	"github.com/akildemir/moneroTss/monero_multi_sig/keysign"
 )
 
 const (

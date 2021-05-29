@@ -13,7 +13,7 @@ import (
 	mocknet "github.com/libp2p/go-libp2p/p2p/net/mock"
 	"github.com/stretchr/testify/assert"
 
-	"gitlab.com/akil27/moneroTss/conversion"
+	"github.com/akildemir/moneroTss/conversion"
 )
 
 func setupHosts(t *testing.T, n int) []host.Host {

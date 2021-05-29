@@ -22,7 +22,7 @@ import (
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
 
-	"gitlab.com/akil27/moneroTss/messages"
+	"github.com/akildemir/moneroTss/messages"
 )
 
 var (

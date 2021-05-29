@@ -1,4 +1,4 @@
-module gitlab.com/akil27/moneroTss
+module github.com/akildemir/moneroTss
 
 go 1.14
 

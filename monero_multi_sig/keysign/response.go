@@ -1,8 +1,8 @@
 package keysign
 
 import (
-	"gitlab.com/akil27/moneroTss/blame"
-	"gitlab.com/akil27/moneroTss/common"
+	"github.com/akildemir/moneroTss/blame"
+	"github.com/akildemir/moneroTss/common"
 )
 
 // Response key sign response

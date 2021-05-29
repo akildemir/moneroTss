@@ -15,8 +15,8 @@ import (
 	"github.com/rs/zerolog/log"
 	"google.golang.org/protobuf/proto"
 
-	"gitlab.com/akil27/moneroTss/conversion"
-	"gitlab.com/akil27/moneroTss/messages"
+	"github.com/akildemir/moneroTss/conversion"
+	"github.com/akildemir/moneroTss/messages"
 )
 
 var (

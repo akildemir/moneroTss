@@ -6,7 +6,7 @@ import (
 
 	"github.com/libp2p/go-libp2p-core/peer"
 
-	"gitlab.com/akil27/moneroTss/messages"
+	"github.com/akildemir/moneroTss/messages"
 )
 
 type PeerStatus struct {

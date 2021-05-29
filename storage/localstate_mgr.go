@@ -16,7 +16,7 @@ import (
 	"github.com/libp2p/go-libp2p-peerstore/addr"
 	ma "github.com/multiformats/go-multiaddr"
 
-	"gitlab.com/akil27/moneroTss/conversion"
+	"github.com/akildemir/moneroTss/conversion"
 )
 
 // KeygenLocalState is a structure used to represent the data we saved locally for different keygen

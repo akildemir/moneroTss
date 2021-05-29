@@ -5,7 +5,7 @@ import (
 	"encoding/json"
 	"sync"
 
-	common "gitlab.com/akil27/moneroTss/common"
+	common "github.com/akildemir/moneroTss/common"
 )
 
 // since monero wallet is slow in synchronization, we need to have the retry

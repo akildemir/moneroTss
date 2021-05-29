@@ -24,12 +24,12 @@ import (
 	"github.com/tendermint/tendermint/crypto/secp256k1"
 	. "gopkg.in/check.v1"
 
-	"gitlab.com/akil27/moneroTss/conversion"
+	"github.com/akildemir/moneroTss/conversion"
 
-	"gitlab.com/akil27/moneroTss/common"
-	"gitlab.com/akil27/moneroTss/messages"
-	"gitlab.com/akil27/moneroTss/p2p"
-	"gitlab.com/akil27/moneroTss/storage"
+	"github.com/akildemir/moneroTss/common"
+	"github.com/akildemir/moneroTss/messages"
+	"github.com/akildemir/moneroTss/p2p"
+	"github.com/akildemir/moneroTss/storage"
 )
 
 const destWallet = "48Qp1DYY95wF2BNbhQZDd5J8dZCucMRz99Y4wAUaDjQhjX8royowfog1sN9WAdVeshQuvU6qKFi9Ji4gj9ZREkjTFYsQbZX"

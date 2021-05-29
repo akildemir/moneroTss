@@ -13,7 +13,7 @@ import (
 	maddr "github.com/multiformats/go-multiaddr"
 	. "gopkg.in/check.v1"
 
-	"gitlab.com/akil27/moneroTss/conversion"
+	"github.com/akildemir/moneroTss/conversion"
 )
 
 type FileStateMgrTestSuite struct{}

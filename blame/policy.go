@@ -8,8 +8,8 @@ import (
 	mapset "github.com/deckarep/golang-set"
 	"github.com/libp2p/go-libp2p-core/peer"
 
-	"gitlab.com/akil27/moneroTss/conversion"
-	"gitlab.com/akil27/moneroTss/messages"
+	"github.com/akildemir/moneroTss/conversion"
+	"github.com/akildemir/moneroTss/messages"
 )
 
 func (m *Manager) tssTimeoutBlame(lastMessageType string, partyIDMap map[string]*btss.PartyID) ([]string, error) {

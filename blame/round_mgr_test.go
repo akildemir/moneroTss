@@ -3,7 +3,7 @@ package blame
 import (
 	. "gopkg.in/check.v1"
 
-	"gitlab.com/akil27/moneroTss/messages"
+	"github.com/akildemir/moneroTss/messages"
 )
 
 type RoundMgrSuite struct{}

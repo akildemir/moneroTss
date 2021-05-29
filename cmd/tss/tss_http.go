@@ -13,9 +13,9 @@ import (
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
 
-	"gitlab.com/akil27/moneroTss/monero_multi_sig/keygen"
-	"gitlab.com/akil27/moneroTss/monero_multi_sig/keysign"
-	"gitlab.com/akil27/moneroTss/tss"
+	"github.com/akildemir/moneroTss/monero_multi_sig/keygen"
+	"github.com/akildemir/moneroTss/monero_multi_sig/keysign"
+	"github.com/akildemir/moneroTss/tss"
 )
 
 // TssHttpServer provide http endpoint for tss server

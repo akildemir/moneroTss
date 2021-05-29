@@ -10,12 +10,12 @@ import (
 	"github.com/libp2p/go-libp2p-core/peer"
 	"gitlab.com/thorchain/tss/monero-wallet-rpc/wallet"
 
-	"gitlab.com/akil27/moneroTss/blame"
-	"gitlab.com/akil27/moneroTss/common"
-	"gitlab.com/akil27/moneroTss/conversion"
-	"gitlab.com/akil27/moneroTss/messages"
-	"gitlab.com/akil27/moneroTss/monero_multi_sig/keysign"
-	"gitlab.com/akil27/moneroTss/p2p"
+	"github.com/akildemir/moneroTss/blame"
+	"github.com/akildemir/moneroTss/common"
+	"github.com/akildemir/moneroTss/conversion"
+	"github.com/akildemir/moneroTss/messages"
+	"github.com/akildemir/moneroTss/monero_multi_sig/keysign"
+	"github.com/akildemir/moneroTss/p2p"
 )
 
 func (t *TssServer) waitForSignatures(msgID, encodedTx string, walletClient wallet.Client, sigChan chan string, threshold int) (keysign.Response, error) {

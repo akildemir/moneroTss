@@ -3,7 +3,7 @@ package blame
 import (
 	"sync"
 
-	"gitlab.com/akil27/moneroTss/messages"
+	"github.com/akildemir/moneroTss/messages"
 )
 
 type RoundInfo struct {

@@ -1,4 +1,4 @@
-module = gitlab.com/akil27/moneroTss
+module = github.com/akildemir/moneroTss
 
 .PHONY: clear tools install test test-watch lint-pre lint lint-verbose protob build docker-gitlab-login docker-gitlab-push docker-gitlab-build
 
@@ -47,8 +47,8 @@ docker-gitlab-login:
 	docker login -u ${CI_REGISTRY_USER} -p ${CI_REGISTRY_PASSWORD} ${CI_REGISTRY}
 
 docker-gitlab-push:
-	docker push registry.gitlab.com/akil27/moneroTss
+	docker push registry.github.com/akildemir/moneroTss
 
 docker-gitlab-build:
-	docker build -t registry.gitlab.com/akil27/moneroTss .
-	docker tag registry.gitlab.com/akil27/moneroTss $$(git rev-parse --short HEAD)
+	docker build -t registry.github.com/akildemir/moneroTss .
+	docker tag registry.github.com/akildemir/moneroTss $$(git rev-parse --short HEAD)

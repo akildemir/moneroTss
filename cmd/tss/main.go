@@ -15,10 +15,10 @@ import (
 	"github.com/libp2p/go-libp2p-peerstore/addr"
 	"gitlab.com/thorchain/binance-sdk/common/types"
 
-	"gitlab.com/akil27/moneroTss/common"
-	"gitlab.com/akil27/moneroTss/conversion"
-	"gitlab.com/akil27/moneroTss/p2p"
-	"gitlab.com/akil27/moneroTss/tss"
+	"github.com/akildemir/moneroTss/common"
+	"github.com/akildemir/moneroTss/conversion"
+	"github.com/akildemir/moneroTss/p2p"
+	"github.com/akildemir/moneroTss/tss"
 )
 
 var (

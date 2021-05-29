@@ -21,13 +21,13 @@ import (
 	tcrypto "github.com/tendermint/tendermint/crypto"
 	moneroWallet "gitlab.com/thorchain/tss/monero-wallet-rpc/wallet"
 
-	"gitlab.com/akil27/moneroTss/blame"
-	"gitlab.com/akil27/moneroTss/common"
-	"gitlab.com/akil27/moneroTss/conversion"
-	"gitlab.com/akil27/moneroTss/messages"
-	"gitlab.com/akil27/moneroTss/monero_multi_sig"
-	"gitlab.com/akil27/moneroTss/p2p"
-	"gitlab.com/akil27/moneroTss/storage"
+	"github.com/akildemir/moneroTss/blame"
+	"github.com/akildemir/moneroTss/common"
+	"github.com/akildemir/moneroTss/conversion"
+	"github.com/akildemir/moneroTss/messages"
+	"github.com/akildemir/moneroTss/monero_multi_sig"
+	"github.com/akildemir/moneroTss/p2p"
+	"github.com/akildemir/moneroTss/storage"
 )
 
 var EnableTest = false

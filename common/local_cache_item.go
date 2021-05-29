@@ -3,7 +3,7 @@ package common
 import (
 	"sync"
 
-	"gitlab.com/akil27/moneroTss/messages"
+	"github.com/akildemir/moneroTss/messages"
 )
 
 // LocalCacheItem used to cache the unconfirmed broadcast message

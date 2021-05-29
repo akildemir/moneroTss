@@ -23,11 +23,11 @@ import (
 	maddr "github.com/multiformats/go-multiaddr"
 	. "gopkg.in/check.v1"
 
-	"gitlab.com/akil27/moneroTss/common"
-	"gitlab.com/akil27/moneroTss/conversion"
-	"gitlab.com/akil27/moneroTss/messages"
-	"gitlab.com/akil27/moneroTss/p2p"
-	"gitlab.com/akil27/moneroTss/storage"
+	"github.com/akildemir/moneroTss/common"
+	"github.com/akildemir/moneroTss/conversion"
+	"github.com/akildemir/moneroTss/messages"
+	"github.com/akildemir/moneroTss/p2p"
+	"github.com/akildemir/moneroTss/storage"
 )
 
 var (

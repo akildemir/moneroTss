@@ -9,8 +9,8 @@ import (
 	"github.com/libp2p/go-libp2p-core/peer"
 	. "gopkg.in/check.v1"
 
-	"gitlab.com/akil27/moneroTss/conversion"
-	"gitlab.com/akil27/moneroTss/messages"
+	"github.com/akildemir/moneroTss/conversion"
+	"github.com/akildemir/moneroTss/messages"
 )
 
 var (

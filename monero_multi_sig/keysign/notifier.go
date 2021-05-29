@@ -11,7 +11,7 @@ import (
 	"github.com/rs/zerolog/log"
 	"gitlab.com/thorchain/tss/monero-wallet-rpc/wallet"
 
-	"gitlab.com/akil27/moneroTss/monero_multi_sig"
+	"github.com/akildemir/moneroTss/monero_multi_sig"
 )
 
 // Notifier is design to receive keysign signature, success or failure
