@@ -27,7 +27,7 @@ import (
 	"github.com/akildemir/moneroTss/conversion"
 
 	"github.com/akildemir/moneroTss/common"
-	"github.com/akildemir/moneroTss/messages"
+	"github.com/akildemir/moneroTss/messagesmn"
 	"github.com/akildemir/moneroTss/p2p"
 	"github.com/akildemir/moneroTss/storage"
 )
@@ -229,14 +229,14 @@ func (s *TssKeysignTestSuite) TestSignMessage(c *C) {
 			}()
 			keysignMsgChannel := keysignIns.GetTssKeySignChannels()
 
-			comm.SetSubscribe(messages.TSSKeySignMsg, messageID, keysignMsgChannel)
-			comm.SetSubscribe(messages.TSSKeySignVerMsg, messageID, keysignMsgChannel)
-			comm.SetSubscribe(messages.TSSControlMsg, messageID, keysignMsgChannel)
-			comm.SetSubscribe(messages.TSSTaskDone, messageID, keysignMsgChannel)
-			defer comm.CancelSubscribe(messages.TSSKeySignMsg, messageID)
-			defer comm.CancelSubscribe(messages.TSSKeySignVerMsg, messageID)
-			defer comm.CancelSubscribe(messages.TSSControlMsg, messageID)
-			defer comm.CancelSubscribe(messages.TSSTaskDone, messageID)
+			comm.SetSubscribe(messagesmn.TSSKeySignMsg, messageID, keysignMsgChannel)
+			comm.SetSubscribe(messagesmn.TSSKeySignVerMsg, messageID, keysignMsgChannel)
+			comm.SetSubscribe(messagesmn.TSSControlMsg, messageID, keysignMsgChannel)
+			comm.SetSubscribe(messagesmn.TSSTaskDone, messageID, keysignMsgChannel)
+			defer comm.CancelSubscribe(messagesmn.TSSKeySignMsg, messageID)
+			defer comm.CancelSubscribe(messagesmn.TSSKeySignVerMsg, messageID)
+			defer comm.CancelSubscribe(messagesmn.TSSControlMsg, messageID)
+			defer comm.CancelSubscribe(messagesmn.TSSTaskDone, messageID)
 			signedTx, err := keysignIns.SignMessage(reqs[idx].EncodedTx, reqs[idx].SignerPubKeys)
 			c.Assert(err, IsNil)
 			if signedTx != nil {
@@ -352,14 +352,14 @@ func (s *TssKeysignTestSuite) TestSignMessageCheckFailure(c *C) {
 			}()
 			keysignMsgChannel := keysignIns.GetTssKeySignChannels()
 
-			comm.SetSubscribe(messages.TSSKeySignMsg, messageID, keysignMsgChannel)
-			comm.SetSubscribe(messages.TSSKeySignVerMsg, messageID, keysignMsgChannel)
-			comm.SetSubscribe(messages.TSSControlMsg, messageID, keysignMsgChannel)
-			comm.SetSubscribe(messages.TSSTaskDone, messageID, keysignMsgChannel)
-			defer comm.CancelSubscribe(messages.TSSKeySignMsg, messageID)
-			defer comm.CancelSubscribe(messages.TSSKeySignVerMsg, messageID)
-			defer comm.CancelSubscribe(messages.TSSControlMsg, messageID)
-			defer comm.CancelSubscribe(messages.TSSTaskDone, messageID)
+			comm.SetSubscribe(messagesmn.TSSKeySignMsg, messageID, keysignMsgChannel)
+			comm.SetSubscribe(messagesmn.TSSKeySignVerMsg, messageID, keysignMsgChannel)
+			comm.SetSubscribe(messagesmn.TSSControlMsg, messageID, keysignMsgChannel)
+			comm.SetSubscribe(messagesmn.TSSTaskDone, messageID, keysignMsgChannel)
+			defer comm.CancelSubscribe(messagesmn.TSSKeySignMsg, messageID)
+			defer comm.CancelSubscribe(messagesmn.TSSKeySignVerMsg, messageID)
+			defer comm.CancelSubscribe(messagesmn.TSSControlMsg, messageID)
+			defer comm.CancelSubscribe(messagesmn.TSSTaskDone, messageID)
 			_, err = keysignIns.SignMessage(reqs[idx].EncodedTx, reqs[idx].SignerPubKeys)
 			blameMgr := keysignIns.moneroCommonStruct.GetBlameMgr()
 			nodes := blameMgr.GetBlame().BlameNodes

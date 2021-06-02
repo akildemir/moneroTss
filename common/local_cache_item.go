@@ -3,18 +3,18 @@ package common
 import (
 	"sync"
 
-	"github.com/akildemir/moneroTss/messages"
+	"github.com/akildemir/moneroTss/messagesmn"
 )
 
 // LocalCacheItem used to cache the unconfirmed broadcast message
 type LocalCacheItem struct {
-	Msg           *messages.WireMessage
+	Msg           *messagesmn.WireMessage
 	Hash          string
 	lock          *sync.Mutex
 	ConfirmedList map[string]string
 }
 
-func NewLocalCacheItem(msg *messages.WireMessage, hash string) *LocalCacheItem {
+func NewLocalCacheItem(msg *messagesmn.WireMessage, hash string) *LocalCacheItem {
 	return &LocalCacheItem{
 		Msg:           msg,
 		Hash:          hash,

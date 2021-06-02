@@ -1,4 +1,4 @@
-package messages
+package messagesmn
 
 import (
 	"math/big"

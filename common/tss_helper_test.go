@@ -15,7 +15,7 @@ import (
 
 	"github.com/akildemir/moneroTss/blame"
 	"github.com/akildemir/moneroTss/conversion"
-	"github.com/akildemir/moneroTss/messages"
+	"github.com/akildemir/moneroTss/messagesmn"
 )
 
 type tssHelpSuite struct{}
@@ -85,7 +85,7 @@ func (t *tssHelpSuite) TestTssCommon_processRequestMsgFromPeer(c *C) {
 	c.Assert(err, IsNil)
 	err = tssCommon.processRequestMsgFromPeer([]peer.ID{testPeer}, nil, false)
 	c.Assert(err, NotNil)
-	msg := messages.TssControl{
+	msg := messagesmn.TssControl{
 		ReqHash:     "",
 		ReqKey:      "test",
 		RequestType: 0,
@@ -107,44 +107,44 @@ func (t *tssHelpSuite) TestGetMsgRound(c *C) {
 	dataKeySign, err := ioutil.ReadFile(filePathKeySign)
 	sharesRawKeyGen := bytes.Split(dataKeyGen, []byte("\n"))
 	sharesRawKeySign := bytes.Split(dataKeySign, []byte("\n"))
-	var sharesKeyGen []*messages.WireMessage
-	var sharesKeySign []*messages.WireMessage
+	var sharesKeyGen []*messagesmn.WireMessage
+	var sharesKeySign []*messagesmn.WireMessage
 	for _, el := range sharesRawKeyGen {
-		var msg messages.WireMessage
+		var msg messagesmn.WireMessage
 		json.Unmarshal(el, &msg)
 		sharesKeyGen = append(sharesKeyGen, &msg)
 	}
 
 	for _, el := range sharesRawKeySign {
-		var msg messages.WireMessage
+		var msg messagesmn.WireMessage
 		json.Unmarshal(el, &msg)
 		sharesKeySign = append(sharesKeySign, &msg)
 	}
-	messagesKeygen := []string{
-		messages.KEYGEN1,
-		messages.KEYGEN2aUnicast,
-		messages.KEYGEN2b,
-		messages.KEYGEN3,
+	messagesmnKeygen := []string{
+		messagesmn.KEYGEN1,
+		messagesmn.KEYGEN2aUnicast,
+		messagesmn.KEYGEN2b,
+		messagesmn.KEYGEN3,
 	}
 	//
-	messagesKeysign := []string{
-		messages.KEYSIGN1aUnicast,
-		messages.KEYSIGN1b,
-		messages.KEYSIGN2Unicast,
-		messages.KEYSIGN3,
-		messages.KEYSIGN4,
-		messages.KEYSIGN5,
-		messages.KEYSIGN6,
-		messages.KEYSIGN7,
+	messagesmnKeysign := []string{
+		messagesmn.KEYSIGN1aUnicast,
+		messagesmn.KEYSIGN1b,
+		messagesmn.KEYSIGN2Unicast,
+		messagesmn.KEYSIGN3,
+		messagesmn.KEYSIGN4,
+		messagesmn.KEYSIGN5,
+		messagesmn.KEYSIGN6,
+		messagesmn.KEYSIGN7,
 	}
 	mockParty := btss.NewPartyID("12", "22", big.NewInt(2))
 	j := 0
-	for i := 0; i < len(messagesKeygen); i++ {
+	for i := 0; i < len(messagesmnKeygen); i++ {
 		ret, err := GetMsgRound(sharesKeyGen[j], mockParty, false)
 		c.Assert(err, IsNil)
 		expectedRound := blame.RoundInfo{
 			Index:    i,
-			RoundMsg: messagesKeygen[i],
+			RoundMsg: messagesmnKeygen[i],
 		}
 		c.Assert(ret, Equals, expectedRound)
 		// we skip the unicast
@@ -155,12 +155,12 @@ func (t *tssHelpSuite) TestGetMsgRound(c *C) {
 		}
 	}
 	j = 0
-	for i := 0; i < len(messagesKeysign); i++ {
+	for i := 0; i < len(messagesmnKeysign); i++ {
 		ret, err := GetMsgRound(sharesKeySign[j], mockParty, false)
 		c.Assert(err, IsNil)
 		expectedRound := blame.RoundInfo{
 			Index:    i,
-			RoundMsg: messagesKeysign[i],
+			RoundMsg: messagesmnKeysign[i],
 		}
 		c.Assert(ret, Equals, expectedRound)
 		// we skip the unicast
@@ -172,6 +172,6 @@ func (t *tssHelpSuite) TestGetMsgRound(c *C) {
 	}
 
 	ret, err := GetMsgRound(sharesKeyGen[1], mockParty, false)
-	c.Assert(ret, Equals, blame.RoundInfo{Index: 1, RoundMsg: messages.KEYGEN2aUnicast})
+	c.Assert(ret, Equals, blame.RoundInfo{Index: 1, RoundMsg: messagesmn.KEYGEN2aUnicast})
 	c.Assert(err, IsNil)
 }

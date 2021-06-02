@@ -4,7 +4,7 @@
 // 	protoc        v3.14.0
 // source: messages/signature_notifier.proto
 
-package messages
+package messagesmn
 
 import (
 	proto "github.com/golang/protobuf/proto"

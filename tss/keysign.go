@@ -13,7 +13,7 @@ import (
 	"github.com/akildemir/moneroTss/blame"
 	"github.com/akildemir/moneroTss/common"
 	"github.com/akildemir/moneroTss/conversion"
-	"github.com/akildemir/moneroTss/messages"
+	"github.com/akildemir/moneroTss/messagesmn"
 	"github.com/akildemir/moneroTss/monero_multi_sig/keysign"
 	"github.com/akildemir/moneroTss/p2p"
 )
@@ -44,7 +44,7 @@ func (t *TssServer) generateSignature(msgID string, req keysign.Request, thresho
 		}, nil
 	}
 
-	oldJoinParty, err := conversion.VersionLTCheck(req.Version, messages.NEWJOINPARTYVERSION)
+	oldJoinParty, err := conversion.VersionLTCheck(req.Version, messagesmn.NEWJOINPARTYVERSION)
 	if err != nil {
 		return keysign.Response{
 			Status: common.Fail,
@@ -224,23 +224,23 @@ func (t *TssServer) KeySign(req keysign.Request) (keysign.Response, error) {
 	}()
 
 	keySignChannels := keysignInstance.GetTssKeySignChannels()
-	t.p2pCommunication.SetSubscribe(messages.TSSKeySignMsg, msgID, keySignChannels)
-	t.p2pCommunication.SetSubscribe(messages.TSSKeySignVerMsg, msgID, keySignChannels)
-	t.p2pCommunication.SetSubscribe(messages.TSSControlMsg, msgID, keySignChannels)
-	t.p2pCommunication.SetSubscribe(messages.TSSTaskDone, msgID, keySignChannels)
+	t.p2pCommunication.SetSubscribe(messagesmn.TSSKeySignMsg, msgID, keySignChannels)
+	t.p2pCommunication.SetSubscribe(messagesmn.TSSKeySignVerMsg, msgID, keySignChannels)
+	t.p2pCommunication.SetSubscribe(messagesmn.TSSControlMsg, msgID, keySignChannels)
+	t.p2pCommunication.SetSubscribe(messagesmn.TSSTaskDone, msgID, keySignChannels)
 
 	defer func() {
-		t.p2pCommunication.CancelSubscribe(messages.TSSKeySignMsg, msgID)
-		t.p2pCommunication.CancelSubscribe(messages.TSSKeySignVerMsg, msgID)
-		t.p2pCommunication.CancelSubscribe(messages.TSSControlMsg, msgID)
-		t.p2pCommunication.CancelSubscribe(messages.TSSTaskDone, msgID)
+		t.p2pCommunication.CancelSubscribe(messagesmn.TSSKeySignMsg, msgID)
+		t.p2pCommunication.CancelSubscribe(messagesmn.TSSKeySignVerMsg, msgID)
+		t.p2pCommunication.CancelSubscribe(messagesmn.TSSControlMsg, msgID)
+		t.p2pCommunication.CancelSubscribe(messagesmn.TSSTaskDone, msgID)
 
 		t.p2pCommunication.ReleaseStream(msgID)
 		t.signatureNotifier.ReleaseStream(msgID)
 		t.partyCoordinator.ReleaseStream(msgID)
 	}()
 
-	oldJoinParty, err := conversion.VersionLTCheck(req.Version, messages.NEWJOINPARTYVERSION)
+	oldJoinParty, err := conversion.VersionLTCheck(req.Version, messagesmn.NEWJOINPARTYVERSION)
 	if err != nil {
 		return keysign.Response{
 			Status: common.Fail,

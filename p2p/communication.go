@@ -22,7 +22,7 @@ import (
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
 
-	"github.com/akildemir/moneroTss/messages"
+	"github.com/akildemir/moneroTss/messagesmn"
 )
 
 var (
@@ -44,7 +44,7 @@ type Message struct {
 	Payload []byte
 }
 
-// Communication use p2p to broadcast messages among all the TSS nodes
+// Communication use p2p to broadcast messagesmn among all the TSS nodes
 type Communication struct {
 	rendezvous       string // based on group
 	bootstrapPeers   []maddr.Multiaddr
@@ -53,10 +53,10 @@ type Communication struct {
 	host             host.Host
 	wg               *sync.WaitGroup
 	stopChan         chan struct{} // channel to indicate whether we should stop
-	subscribers      map[messages.THORChainTSSMessageType]*MessageIDSubscriber
+	subscribers      map[messagesmn.THORChainTSSMessageType]*MessageIDSubscriber
 	subscriberLocker *sync.Mutex
 	streamCount      int64
-	BroadcastMsgChan chan *messages.BroadcastMsgChan
+	BroadcastMsgChan chan *messagesmn.BroadcastMsgChan
 	externalAddr     maddr.Multiaddr
 	streamMgr        *StreamMgr
 }
@@ -81,10 +81,10 @@ func NewCommunication(rendezvous string, bootstrapPeers []maddr.Multiaddr, port 
 		listenAddr:       addr,
 		wg:               &sync.WaitGroup{},
 		stopChan:         make(chan struct{}),
-		subscribers:      make(map[messages.THORChainTSSMessageType]*MessageIDSubscriber),
+		subscribers:      make(map[messagesmn.THORChainTSSMessageType]*MessageIDSubscriber),
 		subscriberLocker: &sync.Mutex{},
 		streamCount:      0,
-		BroadcastMsgChan: make(chan *messages.BroadcastMsgChan, 1024),
+		BroadcastMsgChan: make(chan *messagesmn.BroadcastMsgChan, 1024),
 		externalAddr:     externalAddr,
 		streamMgr:        NewStreamMgr(),
 	}, nil
@@ -105,7 +105,7 @@ func (c *Communication) Broadcast(peers []peer.ID, msg []byte, msgID string) {
 	if len(peers) == 0 {
 		return
 	}
-	// try to discover all peers and then broadcast the messages
+	// try to discover all peers and then broadcast the messagesmn
 	c.wg.Add(1)
 	go c.broadcastToPeers(peers, msg, msgID)
 }
@@ -144,7 +144,7 @@ func (c *Communication) writeToStream(pID peer.ID, msg []byte, msgID string) err
 	defer func() {
 		c.streamMgr.AddStream(msgID, stream)
 	}()
-	c.logger.Debug().Msgf(">>>writing messages to peer(%s)", pID)
+	c.logger.Debug().Msgf(">>>writing messagesmn to peer(%s)", pID)
 
 	return WriteStreamWithBuffer(msg, stream)
 }
@@ -163,7 +163,7 @@ func (c *Communication) readFromStream(stream network.Stream) {
 			c.streamMgr.AddStream("UNKNOWN", stream)
 			return
 		}
-		var wrappedMsg messages.WrappedMessage
+		var wrappedMsg messagesmn.WrappedMessage
 		if err := json.Unmarshal(dataBuf, &wrappedMsg); nil != err {
 			c.logger.Error().Err(err).Msg("fail to unmarshal wrapped message bytes")
 			c.streamMgr.AddStream("UNKNOWN", stream)
@@ -376,7 +376,7 @@ func (c *Communication) Stop() error {
 	return nil
 }
 
-func (c *Communication) SetSubscribe(topic messages.THORChainTSSMessageType, msgID string, channel chan *Message) {
+func (c *Communication) SetSubscribe(topic messagesmn.THORChainTSSMessageType, msgID string, channel chan *Message) {
 	c.subscriberLocker.Lock()
 	defer c.subscriberLocker.Unlock()
 
@@ -388,7 +388,7 @@ func (c *Communication) SetSubscribe(topic messages.THORChainTSSMessageType, msg
 	messageIDSubscribers.Subscribe(msgID, channel)
 }
 
-func (c *Communication) getSubscriber(topic messages.THORChainTSSMessageType, msgID string) chan *Message {
+func (c *Communication) getSubscriber(topic messagesmn.THORChainTSSMessageType, msgID string) chan *Message {
 	c.subscriberLocker.Lock()
 	defer c.subscriberLocker.Unlock()
 	messageIDSubscribers, ok := c.subscribers[topic]
@@ -399,7 +399,7 @@ func (c *Communication) getSubscriber(topic messages.THORChainTSSMessageType, ms
 	return messageIDSubscribers.GetSubscriber(msgID)
 }
 
-func (c *Communication) CancelSubscribe(topic messages.THORChainTSSMessageType, msgID string) {
+func (c *Communication) CancelSubscribe(topic messagesmn.THORChainTSSMessageType, msgID string) {
 	c.subscriberLocker.Lock()
 	defer c.subscriberLocker.Unlock()
 

@@ -20,7 +20,7 @@ import (
 	"github.com/libp2p/go-libp2p-core/peer"
 	"gitlab.com/thorchain/binance-sdk/common/types"
 
-	"github.com/akildemir/moneroTss/messages"
+	"github.com/akildemir/moneroTss/messagesmn"
 )
 
 // GetPeerIDFromSecp256PubKey convert the given pubkey into a peer.ID
@@ -136,10 +136,10 @@ func GetParties(keys []string, localPartyKey string) ([]*btss.PartyID, *btss.Par
 }
 
 func GetPreviousKeySignUicast(current string) string {
-	if strings.HasSuffix(current, messages.KEYSIGN1b) {
-		return messages.KEYSIGN1aUnicast
+	if strings.HasSuffix(current, messagesmn.KEYSIGN1b) {
+		return messagesmn.KEYSIGN1aUnicast
 	}
-	return messages.KEYSIGN2Unicast
+	return messagesmn.KEYSIGN2Unicast
 }
 
 func isOnCurve(x, y *big.Int) bool {

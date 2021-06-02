@@ -4,7 +4,7 @@
 // 	protoc        v3.14.0
 // source: messages/join_party_mn.proto
 
-package messages
+package messagesmn
 
 import (
 	proto "github.com/golang/protobuf/proto"

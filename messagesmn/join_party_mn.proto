@@ -2,7 +2,7 @@ syntax = "proto3";
 
 option go_package = "github.com/akildemir/moneroTss/messages";
 
-package messages;
+package messagesmn;
 
 message JoinPartyRequestMn {
     string ID = 1; // the unique hash id

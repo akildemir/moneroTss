@@ -1,4 +1,4 @@
-package messages
+package messagesmn
 
 const (
 	KEYGEN1          = "KGRound1Message"

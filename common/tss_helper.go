@@ -23,7 +23,7 @@ import (
 	tcrypto "github.com/tendermint/tendermint/crypto"
 
 	"github.com/akildemir/moneroTss/blame"
-	"github.com/akildemir/moneroTss/messages"
+	"github.com/akildemir/moneroTss/messagesmn"
 )
 
 func Contains(s []*btss.PartyID, e *btss.PartyID) bool {
@@ -135,7 +135,7 @@ func checkUnicast(round blame.RoundInfo) bool {
 	return false
 }
 
-func GetMsgRound(wireMsg *messages.WireMessage, partyID *btss.PartyID, isMonero bool) (blame.RoundInfo, error) {
+func GetMsgRound(wireMsg *messagesmn.WireMessage, partyID *btss.PartyID, isMonero bool) (blame.RoundInfo, error) {
 	//
 	if isMonero {
 		var moneroShare MoneroShare
@@ -158,73 +158,73 @@ func GetMsgRound(wireMsg *messages.WireMessage, partyID *btss.PartyID, isMonero 
 	case *keygen.KGRound1Message:
 		return blame.RoundInfo{
 			Index:    0,
-			RoundMsg: messages.KEYGEN1,
+			RoundMsg: messagesmn.KEYGEN1,
 		}, nil
 
 	case *keygen.KGRound2Message1:
 		return blame.RoundInfo{
 			Index:    1,
-			RoundMsg: messages.KEYGEN2aUnicast,
+			RoundMsg: messagesmn.KEYGEN2aUnicast,
 		}, nil
 
 	case *keygen.KGRound2Message2:
 		return blame.RoundInfo{
 			Index:    2,
-			RoundMsg: messages.KEYGEN2b,
+			RoundMsg: messagesmn.KEYGEN2b,
 		}, nil
 
 	case *keygen.KGRound3Message:
 		return blame.RoundInfo{
 			Index:    3,
-			RoundMsg: messages.KEYGEN3,
+			RoundMsg: messagesmn.KEYGEN3,
 		}, nil
 
 	case *signing.SignRound1Message1:
 		return blame.RoundInfo{
 			Index:    0,
-			RoundMsg: messages.KEYSIGN1aUnicast,
+			RoundMsg: messagesmn.KEYSIGN1aUnicast,
 		}, nil
 
 	case *signing.SignRound1Message2:
 		return blame.RoundInfo{
 			Index:    1,
-			RoundMsg: messages.KEYSIGN1b,
+			RoundMsg: messagesmn.KEYSIGN1b,
 		}, nil
 
 	case *signing.SignRound2Message:
 		return blame.RoundInfo{
 			Index:    2,
-			RoundMsg: messages.KEYSIGN2Unicast,
+			RoundMsg: messagesmn.KEYSIGN2Unicast,
 		}, nil
 
 	case *signing.SignRound3Message:
 		return blame.RoundInfo{
 			Index:    3,
-			RoundMsg: messages.KEYSIGN3,
+			RoundMsg: messagesmn.KEYSIGN3,
 		}, nil
 
 	case *signing.SignRound4Message:
 		return blame.RoundInfo{
 			Index:    4,
-			RoundMsg: messages.KEYSIGN4,
+			RoundMsg: messagesmn.KEYSIGN4,
 		}, nil
 
 	case *signing.SignRound5Message:
 		return blame.RoundInfo{
 			Index:    5,
-			RoundMsg: messages.KEYSIGN5,
+			RoundMsg: messagesmn.KEYSIGN5,
 		}, nil
 
 	case *signing.SignRound6Message:
 		return blame.RoundInfo{
 			Index:    6,
-			RoundMsg: messages.KEYSIGN6,
+			RoundMsg: messagesmn.KEYSIGN6,
 		}, nil
 
 	case *signing.SignRound7Message:
 		return blame.RoundInfo{
 			Index:    7,
-			RoundMsg: messages.KEYSIGN7,
+			RoundMsg: messagesmn.KEYSIGN7,
 		}, nil
 
 	default:
@@ -233,25 +233,25 @@ func GetMsgRound(wireMsg *messages.WireMessage, partyID *btss.PartyID, isMonero 
 }
 
 func (t *TssCommon) NotifyTaskDone() error {
-	msg := messages.TssTaskNotifier{TaskDone: true}
+	msg := messagesmn.TssTaskNotifier{TaskDone: true}
 	data, err := json.Marshal(msg)
 	if err != nil {
 		return fmt.Errorf("fail to marshal the request body %w", err)
 	}
-	wrappedMsg := messages.WrappedMessage{
-		MessageType: messages.TSSTaskDone,
+	wrappedMsg := messagesmn.WrappedMessage{
+		MessageType: messagesmn.TSSTaskDone,
 		MsgID:       t.msgID,
 		Payload:     data,
 	}
 
-	t.renderToP2P(&messages.BroadcastMsgChan{
+	t.renderToP2P(&messagesmn.BroadcastMsgChan{
 		WrappedMessage: wrappedMsg,
 		PeersID:        t.P2PPeers,
 	})
 	return nil
 }
 
-func (t *TssCommon) processRequestMsgFromPeer(peersID []peer.ID, msg *messages.TssControl, requester bool) error {
+func (t *TssCommon) processRequestMsgFromPeer(peersID []peer.ID, msg *messagesmn.TssControl, requester bool) error {
 	// we need to send msg to the peer
 	if !requester {
 		if msg == nil {
@@ -270,13 +270,13 @@ func (t *TssCommon) processRequestMsgFromPeer(peersID []peer.ID, msg *messages.T
 	if err != nil {
 		return fmt.Errorf("fail to marshal the request body %w", err)
 	}
-	wrappedMsg := messages.WrappedMessage{
-		MessageType: messages.TSSControlMsg,
+	wrappedMsg := messagesmn.WrappedMessage{
+		MessageType: messagesmn.TSSControlMsg,
 		MsgID:       t.msgID,
 		Payload:     data,
 	}
 
-	t.renderToP2P(&messages.BroadcastMsgChan{
+	t.renderToP2P(&messagesmn.BroadcastMsgChan{
 		WrappedMessage: wrappedMsg,
 		PeersID:        peersID,
 	})

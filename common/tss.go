@@ -17,7 +17,7 @@ import (
 
 	"github.com/akildemir/moneroTss/blame"
 	"github.com/akildemir/moneroTss/conversion"
-	"github.com/akildemir/moneroTss/messages"
+	"github.com/akildemir/moneroTss/messagesmn"
 	"github.com/akildemir/moneroTss/p2p"
 )
 
@@ -28,48 +28,48 @@ type PartyInfo struct {
 }
 
 type TssCommon struct {
-	conf                TssConfig
-	logger              zerolog.Logger
-	partyLock           *sync.Mutex
-	partyInfo           *PartyInfo
-	PartyIDtoP2PID      map[string]peer.ID
-	unConfirmedMsgLock  *sync.Mutex
-	unConfirmedMessages map[string]*LocalCacheItem
-	localPeerID         string
-	broadcastChannel    chan *messages.BroadcastMsgChan
-	TssMsg              chan *p2p.Message
-	P2PPeers            []peer.ID // most of tss message are broadcast, we store the peers ID to avoid iterating
-	msgID               string
-	privateKey          tcrypto.PrivKey
-	taskDone            chan struct{}
-	blameMgr            *blame.Manager
-	finishedPeers       map[string]bool
-	culprits            []*btss.PartyID
+	conf                  TssConfig
+	logger                zerolog.Logger
+	partyLock             *sync.Mutex
+	partyInfo             *PartyInfo
+	PartyIDtoP2PID        map[string]peer.ID
+	unConfirmedMsgLock    *sync.Mutex
+	unConfirmedmessagesmn map[string]*LocalCacheItem
+	localPeerID           string
+	broadcastChannel      chan *messagesmn.BroadcastMsgChan
+	TssMsg                chan *p2p.Message
+	P2PPeers              []peer.ID // most of tss message are broadcast, we store the peers ID to avoid iterating
+	msgID                 string
+	privateKey            tcrypto.PrivKey
+	taskDone              chan struct{}
+	blameMgr              *blame.Manager
+	finishedPeers         map[string]bool
+	culprits              []*btss.PartyID
 }
 
-func NewTssCommon(peerID string, broadcastChannel chan *messages.BroadcastMsgChan, conf TssConfig, msgID string, privKey tcrypto.PrivKey) *TssCommon {
+func NewTssCommon(peerID string, broadcastChannel chan *messagesmn.BroadcastMsgChan, conf TssConfig, msgID string, privKey tcrypto.PrivKey) *TssCommon {
 	return &TssCommon{
-		conf:                conf,
-		logger:              log.With().Str("module", "tsscommon").Logger(),
-		partyLock:           &sync.Mutex{},
-		partyInfo:           nil,
-		PartyIDtoP2PID:      make(map[string]peer.ID),
-		unConfirmedMsgLock:  &sync.Mutex{},
-		unConfirmedMessages: make(map[string]*LocalCacheItem),
-		broadcastChannel:    broadcastChannel,
-		TssMsg:              make(chan *p2p.Message),
-		P2PPeers:            nil,
-		msgID:               msgID,
-		localPeerID:         peerID,
-		privateKey:          privKey,
-		taskDone:            make(chan struct{}),
-		blameMgr:            blame.NewBlameManager(),
-		finishedPeers:       make(map[string]bool),
-		culprits:            []*btss.PartyID{},
+		conf:                  conf,
+		logger:                log.With().Str("module", "tsscommon").Logger(),
+		partyLock:             &sync.Mutex{},
+		partyInfo:             nil,
+		PartyIDtoP2PID:        make(map[string]peer.ID),
+		unConfirmedMsgLock:    &sync.Mutex{},
+		unConfirmedmessagesmn: make(map[string]*LocalCacheItem),
+		broadcastChannel:      broadcastChannel,
+		TssMsg:                make(chan *p2p.Message),
+		P2PPeers:              nil,
+		msgID:                 msgID,
+		localPeerID:           peerID,
+		privateKey:            privKey,
+		taskDone:              make(chan struct{}),
+		blameMgr:              blame.NewBlameManager(),
+		finishedPeers:         make(map[string]bool),
+		culprits:              []*btss.PartyID{},
 	}
 }
 
-func (t *TssCommon) renderToP2P(broadcastMsg *messages.BroadcastMsgChan) {
+func (t *TssCommon) renderToP2P(broadcastMsg *messagesmn.BroadcastMsgChan) {
 	if t.broadcastChannel == nil {
 		t.logger.Warn().Msg("broadcast channel is not set")
 		return
@@ -118,10 +118,10 @@ func (t *TssCommon) SetLocalPeerID(peerID string) {
 	t.localPeerID = peerID
 }
 
-func (t *TssCommon) processInvalidMsgBlame(wireMsg *messages.WireMessage, round blame.RoundInfo, err *btss.Error) error {
+func (t *TssCommon) processInvalidMsgBlame(wireMsg *messagesmn.WireMessage, round blame.RoundInfo, err *btss.Error) error {
 	// now we get the culprits ID, invalid message and signature the culprits sent
 	var culpritsID []string
-	var invalidMsgs []*messages.WireMessage
+	var invalidMsgs []*messagesmn.WireMessage
 	unicast := checkUnicast(round)
 	t.culprits = append(t.culprits, err.Culprits()...)
 	for _, el := range err.Culprits() {
@@ -157,7 +157,7 @@ func (t *TssCommon) processInvalidMsgBlame(wireMsg *messages.WireMessage, round 
 }
 
 // updateLocal will apply the wireMsg to local keygen/keysign party
-func (t *TssCommon) updateLocal(wireMsg *messages.WireMessage, moneroShareChan chan *MoneroShare) error {
+func (t *TssCommon) updateLocal(wireMsg *messagesmn.WireMessage, moneroShareChan chan *MoneroShare) error {
 	if wireMsg == nil || wireMsg.Routing == nil || wireMsg.Routing.From == nil {
 		t.logger.Warn().Msg("wire msg is nil")
 		return errors.New("invalid wireMsg")
@@ -258,7 +258,7 @@ func (t *TssCommon) updateLocal(wireMsg *messages.WireMessage, moneroShareChan c
 	return nil
 }
 
-func (t *TssCommon) checkDupAndUpdateVerMsg(bMsg *messages.BroadcastConfirmMessage, peerID string) bool {
+func (t *TssCommon) checkDupAndUpdateVerMsg(bMsg *messagesmn.BroadcastConfirmMessage, peerID string) bool {
 	localCacheItem := t.TryGetLocalCacheItem(bMsg.Key)
 	// we check whether this node has already sent the VerMsg message to avoid eclipse of others VerMsg
 	if localCacheItem == nil {
@@ -275,7 +275,7 @@ func (t *TssCommon) checkDupAndUpdateVerMsg(bMsg *messages.BroadcastConfirmMessa
 	return true
 }
 
-func (t *TssCommon) ProcessOneMessage(wrappedMsg *messages.WrappedMessage, peerID string, moneroShareChan chan *MoneroShare) error {
+func (t *TssCommon) ProcessOneMessage(wrappedMsg *messagesmn.WrappedMessage, peerID string, moneroShareChan chan *MoneroShare) error {
 	t.logger.Debug().Msg("start process one message")
 	defer t.logger.Debug().Msg("finish processing one message")
 	if nil == wrappedMsg {
@@ -283,14 +283,14 @@ func (t *TssCommon) ProcessOneMessage(wrappedMsg *messages.WrappedMessage, peerI
 	}
 
 	switch wrappedMsg.MessageType {
-	case messages.TSSKeyGenMsg, messages.TSSKeySignMsg:
-		var wireMsg messages.WireMessage
+	case messagesmn.TSSKeyGenMsg, messagesmn.TSSKeySignMsg:
+		var wireMsg messagesmn.WireMessage
 		if err := json.Unmarshal(wrappedMsg.Payload, &wireMsg); nil != err {
 			return fmt.Errorf("fail to unmarshal wire message: %w", err)
 		}
 		return t.processTSSMsg(&wireMsg, wrappedMsg.MessageType, false, moneroShareChan)
-	case messages.TSSKeyGenVerMsg, messages.TSSKeySignVerMsg:
-		var bMsg messages.BroadcastConfirmMessage
+	case messagesmn.TSSKeyGenVerMsg, messagesmn.TSSKeySignVerMsg:
+		var bMsg messagesmn.BroadcastConfirmMessage
 		if err := json.Unmarshal(wrappedMsg.Payload, &bMsg); nil != err {
 			return errors.New("fail to unmarshal broadcast confirm message")
 		}
@@ -299,8 +299,8 @@ func (t *TssCommon) ProcessOneMessage(wrappedMsg *messages.WrappedMessage, peerI
 		if ret {
 			return t.processVerMsg(&bMsg, wrappedMsg.MessageType, moneroShareChan)
 		}
-	case messages.TSSTaskDone:
-		var wireMsg messages.TssTaskNotifier
+	case messagesmn.TSSTaskDone:
+		var wireMsg messagesmn.TssTaskNotifier
 		err := json.Unmarshal(wrappedMsg.Payload, &wireMsg)
 		if err != nil {
 			t.logger.Error().Err(err).Msg("fail to unmarshal the notify message")
@@ -318,8 +318,8 @@ func (t *TssCommon) ProcessOneMessage(wrappedMsg *messages.WrappedMessage, peerI
 			}
 			return nil
 		}
-	case messages.TSSControlMsg:
-		var wireMsg messages.TssControl
+	case messagesmn.TSSControlMsg:
+		var wireMsg messagesmn.TssControl
 		if err := json.Unmarshal(wrappedMsg.Payload, &wireMsg); nil != err {
 			return fmt.Errorf("fail to unmarshal wire message: %w", err)
 		}
@@ -390,14 +390,14 @@ func (t *TssCommon) hashCheck(localCacheItem *LocalCacheItem, threshold int) err
 	return blame.ErrNotMajority
 }
 
-func (t *TssCommon) ProcessOutCh(msg []byte, r *btss.MessageRouting, roundInfo string, msgType messages.THORChainTSSMessageType) error {
+func (t *TssCommon) ProcessOutCh(msg []byte, r *btss.MessageRouting, roundInfo string, msgType messagesmn.THORChainTSSMessageType) error {
 	sig, err := GenerateSignature(msg, t.msgID, t.privateKey)
 	if err != nil {
 		t.logger.Error().Err(err).Msg("fail to generate the share's signature")
 		return err
 	}
 
-	wireMsg := messages.WireMessage{
+	wireMsg := messagesmn.WireMessage{
 		Routing:   r,
 		RoundInfo: roundInfo,
 		Message:   msg,
@@ -407,7 +407,7 @@ func (t *TssCommon) ProcessOutCh(msg []byte, r *btss.MessageRouting, roundInfo s
 	if err != nil {
 		return fmt.Errorf("fail to convert tss msg to wire bytes: %w", err)
 	}
-	wrappedMsg := messages.WrappedMessage{
+	wrappedMsg := messagesmn.WrappedMessage{
 		MessageType: msgType,
 		MsgID:       t.msgID,
 		Payload:     wireMsgBytes,
@@ -425,7 +425,7 @@ func (t *TssCommon) ProcessOutCh(msg []byte, r *btss.MessageRouting, roundInfo s
 			peerIDs = append(peerIDs, peerID)
 		}
 	}
-	t.renderToP2P(&messages.BroadcastMsgChan{
+	t.renderToP2P(&messagesmn.BroadcastMsgChan{
 		WrappedMessage: wrappedMsg,
 		PeersID:        peerIDs,
 	})
@@ -433,7 +433,7 @@ func (t *TssCommon) ProcessOutCh(msg []byte, r *btss.MessageRouting, roundInfo s
 	return nil
 }
 
-func (t *TssCommon) applyShare(localCacheItem *LocalCacheItem, threshold int, key string, msgType messages.THORChainTSSMessageType, moneroShareChan chan *MoneroShare) error {
+func (t *TssCommon) applyShare(localCacheItem *LocalCacheItem, threshold int, key string, msgType messagesmn.THORChainTSSMessageType, moneroShareChan chan *MoneroShare) error {
 	unicast := true
 	if localCacheItem.Msg.Routing.IsBroadcast {
 		unicast = false
@@ -468,7 +468,7 @@ func (t *TssCommon) applyShare(localCacheItem *LocalCacheItem, threshold int, ke
 	return nil
 }
 
-func (t *TssCommon) requestShareFromPeer(localCacheItem *LocalCacheItem, threshold int, key string, msgType messages.THORChainTSSMessageType) error {
+func (t *TssCommon) requestShareFromPeer(localCacheItem *LocalCacheItem, threshold int, key string, msgType messagesmn.THORChainTSSMessageType) error {
 	targetHash, err := t.getMsgHash(localCacheItem, threshold)
 	if err != nil {
 		t.logger.Debug().Msg("we do not know which message to request, so we quit")
@@ -486,7 +486,7 @@ func (t *TssCommon) requestShareFromPeer(localCacheItem *LocalCacheItem, thresho
 		}
 	}
 
-	msg := &messages.TssControl{
+	msg := &messagesmn.TssControl{
 		ReqHash:     targetHash,
 		ReqKey:      key,
 		RequestType: 0,
@@ -494,13 +494,13 @@ func (t *TssCommon) requestShareFromPeer(localCacheItem *LocalCacheItem, thresho
 	}
 	t.blameMgr.GetShareMgr().Set(targetHash)
 	switch msgType {
-	case messages.TSSKeyGenVerMsg:
-		msg.RequestType = messages.TSSKeyGenMsg
+	case messagesmn.TSSKeyGenVerMsg:
+		msg.RequestType = messagesmn.TSSKeyGenMsg
 		return t.processRequestMsgFromPeer(peersIDs, msg, true)
-	case messages.TSSKeySignVerMsg:
-		msg.RequestType = messages.TSSKeySignMsg
+	case messagesmn.TSSKeySignVerMsg:
+		msg.RequestType = messagesmn.TSSKeySignMsg
 		return t.processRequestMsgFromPeer(peersIDs, msg, true)
-	case messages.TSSKeySignMsg, messages.TSSKeyGenMsg:
+	case messagesmn.TSSKeySignMsg, messagesmn.TSSKeyGenMsg:
 		msg.RequestType = msgType
 		return t.processRequestMsgFromPeer(peersIDs, msg, true)
 	default:
@@ -509,7 +509,7 @@ func (t *TssCommon) requestShareFromPeer(localCacheItem *LocalCacheItem, thresho
 	}
 }
 
-func (t *TssCommon) processVerMsg(broadcastConfirmMsg *messages.BroadcastConfirmMessage, msgType messages.THORChainTSSMessageType, moneroShareChan chan *MoneroShare) error {
+func (t *TssCommon) processVerMsg(broadcastConfirmMsg *messagesmn.BroadcastConfirmMessage, msgType messagesmn.THORChainTSSMessageType, moneroShareChan chan *MoneroShare) error {
 	t.logger.Debug().Msg("process ver msg")
 	defer t.logger.Debug().Msg("finish process ver msg")
 	if nil == broadcastConfirmMsg {
@@ -524,7 +524,7 @@ func (t *TssCommon) processVerMsg(broadcastConfirmMsg *messages.BroadcastConfirm
 	if nil == localCacheItem {
 		// we didn't receive the TSS Message yet
 		localCacheItem = NewLocalCacheItem(nil, broadcastConfirmMsg.Hash)
-		t.updateLocalUnconfirmedMessages(key, localCacheItem)
+		t.updateLocalUnconfirmedmessagesmn(key, localCacheItem)
 	}
 
 	localCacheItem.UpdateConfirmList(broadcastConfirmMsg.P2PID, broadcastConfirmMsg.Hash)
@@ -541,13 +541,13 @@ func (t *TssCommon) processVerMsg(broadcastConfirmMsg *messages.BroadcastConfirm
 	return t.applyShare(localCacheItem, threshold, key, msgType, moneroShareChan)
 }
 
-func (t *TssCommon) broadcastHashToPeers(key, msgHash string, peerIDs []peer.ID, msgType messages.THORChainTSSMessageType) error {
+func (t *TssCommon) broadcastHashToPeers(key, msgHash string, peerIDs []peer.ID, msgType messagesmn.THORChainTSSMessageType) error {
 	if len(peerIDs) == 0 {
 		t.logger.Error().Msg("fail to get any peer ID")
 		return errors.New("fail to get any peer ID")
 	}
 
-	broadcastConfirmMsg := &messages.BroadcastConfirmMessage{
+	broadcastConfirmMsg := &messagesmn.BroadcastConfirmMessage{
 		// P2PID will be filled up by the receiver.
 		P2PID: "",
 		Key:   key,
@@ -559,12 +559,12 @@ func (t *TssCommon) broadcastHashToPeers(key, msgHash string, peerIDs []peer.ID,
 	}
 	t.logger.Debug().Msg("broadcast VerMsg to all other parties")
 
-	p2pWrappedMSg := messages.WrappedMessage{
+	p2pWrappedMSg := messagesmn.WrappedMessage{
 		MessageType: msgType,
 		MsgID:       t.msgID,
 		Payload:     buf,
 	}
-	t.renderToP2P(&messages.BroadcastMsgChan{
+	t.renderToP2P(&messagesmn.BroadcastMsgChan{
 		WrappedMessage: p2pWrappedMSg,
 		PeersID:        peerIDs,
 	})
@@ -572,7 +572,7 @@ func (t *TssCommon) broadcastHashToPeers(key, msgHash string, peerIDs []peer.ID,
 	return nil
 }
 
-func (t *TssCommon) receiverBroadcastHashToPeers(wireMsg *messages.WireMessage, msgType messages.THORChainTSSMessageType) error {
+func (t *TssCommon) receiverBroadcastHashToPeers(wireMsg *messagesmn.WireMessage, msgType messagesmn.THORChainTSSMessageType) error {
 	var peerIDs []peer.ID
 	dataOwnerPartyID := wireMsg.Routing.From.Id
 	dataOwnerPeerID, ok := t.PartyIDtoP2PID[dataOwnerPartyID]
@@ -600,7 +600,7 @@ func (t *TssCommon) receiverBroadcastHashToPeers(wireMsg *messages.WireMessage, 
 }
 
 // processTSSMsg
-func (t *TssCommon) processTSSMsg(wireMsg *messages.WireMessage, msgType messages.THORChainTSSMessageType, forward bool, moneroShareChan chan *MoneroShare) error {
+func (t *TssCommon) processTSSMsg(wireMsg *messagesmn.WireMessage, msgType messagesmn.THORChainTSSMessageType, forward bool, moneroShareChan chan *MoneroShare) error {
 	t.logger.Debug().Msg("process wire message")
 	defer t.logger.Debug().Msg("finish process wire message")
 
@@ -647,7 +647,7 @@ func (t *TssCommon) processTSSMsg(wireMsg *messages.WireMessage, msgType message
 	if nil == localCacheItem {
 		t.logger.Debug().Msgf("++%s doesn't exist yet,add a new one", key)
 		localCacheItem = NewLocalCacheItem(wireMsg, msgHash)
-		t.updateLocalUnconfirmedMessages(key, localCacheItem)
+		t.updateLocalUnconfirmedmessagesmn(key, localCacheItem)
 	} else {
 		// this means we received the broadcast confirm message from other party first
 		t.logger.Debug().Msgf("==%s exist", key)
@@ -666,21 +666,21 @@ func (t *TssCommon) processTSSMsg(wireMsg *messages.WireMessage, msgType message
 	return t.applyShare(localCacheItem, threshold, key, msgType, moneroShareChan)
 }
 
-func getBroadcastMessageType(msgType messages.THORChainTSSMessageType) messages.THORChainTSSMessageType {
+func getBroadcastMessageType(msgType messagesmn.THORChainTSSMessageType) messagesmn.THORChainTSSMessageType {
 	switch msgType {
-	case messages.TSSKeyGenMsg:
-		return messages.TSSKeyGenVerMsg
-	case messages.TSSKeySignMsg:
-		return messages.TSSKeySignVerMsg
+	case messagesmn.TSSKeyGenMsg:
+		return messagesmn.TSSKeyGenVerMsg
+	case messagesmn.TSSKeySignMsg:
+		return messagesmn.TSSKeySignVerMsg
 	default:
-		return messages.Unknown // this should not happen
+		return messagesmn.Unknown // this should not happen
 	}
 }
 
 func (t *TssCommon) TryGetLocalCacheItem(key string) *LocalCacheItem {
 	t.unConfirmedMsgLock.Lock()
 	defer t.unConfirmedMsgLock.Unlock()
-	localCacheItem, ok := t.unConfirmedMessages[key]
+	localCacheItem, ok := t.unConfirmedmessagesmn[key]
 	if !ok {
 		return nil
 	}
@@ -691,28 +691,28 @@ func (t *TssCommon) TryGetAllLocalCached() []*LocalCacheItem {
 	var localCachedItems []*LocalCacheItem
 	t.unConfirmedMsgLock.Lock()
 	defer t.unConfirmedMsgLock.Unlock()
-	for _, value := range t.unConfirmedMessages {
+	for _, value := range t.unConfirmedmessagesmn {
 		localCachedItems = append(localCachedItems, value)
 	}
 	return localCachedItems
 }
 
-func (t *TssCommon) updateLocalUnconfirmedMessages(key string, cacheItem *LocalCacheItem) {
+func (t *TssCommon) updateLocalUnconfirmedmessagesmn(key string, cacheItem *LocalCacheItem) {
 	t.unConfirmedMsgLock.Lock()
 	defer t.unConfirmedMsgLock.Unlock()
-	t.unConfirmedMessages[key] = cacheItem
+	t.unConfirmedmessagesmn[key] = cacheItem
 }
 
 func (t *TssCommon) removeKey(key string) {
 	t.unConfirmedMsgLock.Lock()
 	defer t.unConfirmedMsgLock.Unlock()
-	delete(t.unConfirmedMessages, key)
+	delete(t.unConfirmedmessagesmn, key)
 }
 
-func (t *TssCommon) ProcessInboundMessages(finishChan chan struct{}, wg *sync.WaitGroup, moneroShareChan chan *MoneroShare) {
-	t.logger.Debug().Msg("start processing inbound messages")
+func (t *TssCommon) ProcessInboundmessagesmn(finishChan chan struct{}, wg *sync.WaitGroup, moneroShareChan chan *MoneroShare) {
+	t.logger.Debug().Msg("start processing inbound messagesmn")
 	defer wg.Done()
-	defer t.logger.Debug().Msg("stop processing inbound messages")
+	defer t.logger.Debug().Msg("stop processing inbound messagesmn")
 	for {
 		select {
 		case <-finishChan:
@@ -721,7 +721,7 @@ func (t *TssCommon) ProcessInboundMessages(finishChan chan struct{}, wg *sync.Wa
 			if !ok {
 				return
 			}
-			var wrappedMsg messages.WrappedMessage
+			var wrappedMsg messagesmn.WrappedMessage
 			if err := json.Unmarshal(m.Payload, &wrappedMsg); nil != err {
 				t.logger.Error().Err(err).Msg("fail to unmarshal wrapped message bytes")
 				continue

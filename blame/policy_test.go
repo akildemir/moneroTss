@@ -10,7 +10,7 @@ import (
 	. "gopkg.in/check.v1"
 
 	"github.com/akildemir/moneroTss/conversion"
-	"github.com/akildemir/moneroTss/messages"
+	"github.com/akildemir/moneroTss/messagesmn"
 )
 
 var (
@@ -76,7 +76,7 @@ func (p *policyTestSuite) TestGetBroadcastBlame(c *C) {
 		IsToOldCommittee:        false,
 		IsToOldAndNewCommittees: false,
 	}
-	msg := messages.WireMessage{
+	msg := messagesmn.WireMessage{
 		Routing:   &r1,
 		RoundInfo: "key1",
 		Message:   nil,
@@ -105,7 +105,7 @@ func (p *policyTestSuite) TestTssWrongShareBlame(c *C) {
 		IsToOldCommittee:        false,
 		IsToOldAndNewCommittees: false,
 	}
-	msg := messages.WireMessage{
+	msg := messagesmn.WireMessage{
 		Routing:   &r1,
 		RoundInfo: "key2",
 		Message:   nil,
