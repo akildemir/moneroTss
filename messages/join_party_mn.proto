@@ -9,7 +9,7 @@ message JoinPartyRequestMn {
 }
 
 message JoinPartyLeaderCommMn {
-    enum ResponseType {
+    enum ResponseTypeMn {
         Unknown = 0;
         Success = 1;
         Timeout = 2;
@@ -18,7 +18,7 @@ message JoinPartyLeaderCommMn {
     }
     string ID = 1; // unique hash id
     string MsgType = 2; // unique hash id
-    ResponseType type = 3; // result
+    ResponseTypeMn type = 3; // result
     repeated string PeerIDs = 4; // if Success , this will be the list of peers to form the ceremony, if fail , this will be the peers that are available
 
 }

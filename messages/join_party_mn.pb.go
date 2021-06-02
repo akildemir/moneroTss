@@ -2,7 +2,7 @@
 // versions:
 // 	protoc-gen-go v1.25.0
 // 	protoc        v3.14.0
-// source: messages/join_party.proto
+// source: messages/join_party_mn.proto
 
 package messages
 
@@ -25,26 +25,26 @@ const (
 // of the legacy proto package is being used.
 const _ = proto.ProtoPackageIsVersion4
 
-type JoinPartyLeaderCommMn_ResponseType int32
+type JoinPartyLeaderCommMn_ResponseTypeMn int32
 
 const (
-	JoinPartyLeaderCommMn_Unknown        JoinPartyLeaderCommMn_ResponseType = 0
-	JoinPartyLeaderCommMn_Success        JoinPartyLeaderCommMn_ResponseType = 1
-	JoinPartyLeaderCommMn_Timeout        JoinPartyLeaderCommMn_ResponseType = 2
-	JoinPartyLeaderCommMn_LeaderNotReady JoinPartyLeaderCommMn_ResponseType = 3
-	JoinPartyLeaderCommMn_UnknownPeer    JoinPartyLeaderCommMn_ResponseType = 4
+	JoinPartyLeaderCommMn_Unknown        JoinPartyLeaderCommMn_ResponseTypeMn = 0
+	JoinPartyLeaderCommMn_Success        JoinPartyLeaderCommMn_ResponseTypeMn = 1
+	JoinPartyLeaderCommMn_Timeout        JoinPartyLeaderCommMn_ResponseTypeMn = 2
+	JoinPartyLeaderCommMn_LeaderNotReady JoinPartyLeaderCommMn_ResponseTypeMn = 3
+	JoinPartyLeaderCommMn_UnknownPeer    JoinPartyLeaderCommMn_ResponseTypeMn = 4
 )
 
-// Enum value maps for JoinPartyLeaderCommMn_ResponseType.
+// Enum value maps for JoinPartyLeaderCommMn_ResponseTypeMn.
 var (
-	JoinPartyLeaderCommMn_ResponseType_name = map[int32]string{
+	JoinPartyLeaderCommMn_ResponseTypeMn_name = map[int32]string{
 		0: "Unknown",
 		1: "Success",
 		2: "Timeout",
 		3: "LeaderNotReady",
 		4: "UnknownPeer",
 	}
-	JoinPartyLeaderCommMn_ResponseType_value = map[string]int32{
+	JoinPartyLeaderCommMn_ResponseTypeMn_value = map[string]int32{
 		"Unknown":        0,
 		"Success":        1,
 		"Timeout":        2,
@@ -53,30 +53,30 @@ var (
 	}
 )
 
-func (x JoinPartyLeaderCommMn_ResponseType) Enum() *JoinPartyLeaderCommMn_ResponseType {
-	p := new(JoinPartyLeaderCommMn_ResponseType)
+func (x JoinPartyLeaderCommMn_ResponseTypeMn) Enum() *JoinPartyLeaderCommMn_ResponseTypeMn {
+	p := new(JoinPartyLeaderCommMn_ResponseTypeMn)
 	*p = x
 	return p
 }
 
-func (x JoinPartyLeaderCommMn_ResponseType) String() string {
+func (x JoinPartyLeaderCommMn_ResponseTypeMn) String() string {
 	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
 }
 
-func (JoinPartyLeaderCommMn_ResponseType) Descriptor() protoreflect.EnumDescriptor {
+func (JoinPartyLeaderCommMn_ResponseTypeMn) Descriptor() protoreflect.EnumDescriptor {
 	return file_messages_join_party_mn_proto_enumTypes[0].Descriptor()
 }
 
-func (JoinPartyLeaderCommMn_ResponseType) Type() protoreflect.EnumType {
+func (JoinPartyLeaderCommMn_ResponseTypeMn) Type() protoreflect.EnumType {
 	return &file_messages_join_party_mn_proto_enumTypes[0]
 }
 
-func (x JoinPartyLeaderCommMn_ResponseType) Number() protoreflect.EnumNumber {
+func (x JoinPartyLeaderCommMn_ResponseTypeMn) Number() protoreflect.EnumNumber {
 	return protoreflect.EnumNumber(x)
 }
 
-// Deprecated: Use JoinPartyLeaderCommMn_ResponseType.Descriptor instead.
-func (JoinPartyLeaderCommMn_ResponseType) EnumDescriptor() ([]byte, []int) {
+// Deprecated: Use JoinPartyLeaderCommMn_ResponseTypeMn.Descriptor instead.
+func (JoinPartyLeaderCommMn_ResponseTypeMn) EnumDescriptor() ([]byte, []int) {
 	return file_messages_join_party_mn_proto_rawDescGZIP(), []int{1, 0}
 }
 
@@ -132,10 +132,10 @@ type JoinPartyLeaderCommMn struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	ID      string                             `protobuf:"bytes,1,opt,name=ID,proto3" json:"ID,omitempty"`                                                       // unique hash id
-	MsgType string                             `protobuf:"bytes,2,opt,name=MsgType,proto3" json:"MsgType,omitempty"`                                             // unique hash id
-	Type    JoinPartyLeaderCommMn_ResponseType `protobuf:"varint,3,opt,name=type,proto3,enum=messages.JoinPartyLeaderCommMn_ResponseType" json:"type,omitempty"` // result
-	PeerIDs []string                           `protobuf:"bytes,4,rep,name=PeerIDs,proto3" json:"PeerIDs,omitempty"`                                             // if Success , this will be the list of peers to form the ceremony, if fail , this will be the peers that are available
+	ID      string                               `protobuf:"bytes,1,opt,name=ID,proto3" json:"ID,omitempty"`                                                         // unique hash id
+	MsgType string                               `protobuf:"bytes,2,opt,name=MsgType,proto3" json:"MsgType,omitempty"`                                               // unique hash id
+	Type    JoinPartyLeaderCommMn_ResponseTypeMn `protobuf:"varint,3,opt,name=type,proto3,enum=messages.JoinPartyLeaderCommMn_ResponseTypeMn" json:"type,omitempty"` // result
+	PeerIDs []string                             `protobuf:"bytes,4,rep,name=PeerIDs,proto3" json:"PeerIDs,omitempty"`                                               // if Success , this will be the list of peers to form the ceremony, if fail , this will be the peers that are available
 }
 
 func (x *JoinPartyLeaderCommMn) Reset() {
@@ -184,7 +184,7 @@ func (x *JoinPartyLeaderCommMn) GetMsgType() string {
 	return ""
 }
 
-func (x *JoinPartyLeaderCommMn) GetType() JoinPartyLeaderCommMn_ResponseType {
+func (x *JoinPartyLeaderCommMn) GetType() JoinPartyLeaderCommMn_ResponseTypeMn {
 	if x != nil {
 		return x.Type
 	}
@@ -242,12 +242,12 @@ func file_messages_join_party_mn_proto_rawDescGZIP() []byte {
 var file_messages_join_party_mn_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
 var file_messages_join_party_mn_proto_msgTypes = make([]protoimpl.MessageInfo, 2)
 var file_messages_join_party_mn_proto_goTypes = []interface{}{
-	(JoinPartyLeaderCommMn_ResponseType)(0), // 0: messages.JoinPartyLeaderCommMn.ResponseType
-	(*JoinPartyRequestMn)(nil),              // 1: messages.JoinPartyRequestMn
-	(*JoinPartyLeaderCommMn)(nil),           // 2: messages.JoinPartyLeaderCommMn
+	(JoinPartyLeaderCommMn_ResponseTypeMn)(0), // 0: messages.JoinPartyLeaderCommMn.ResponseTypeMn
+	(*JoinPartyRequestMn)(nil),                // 1: messages.JoinPartyRequestMn
+	(*JoinPartyLeaderCommMn)(nil),             // 2: messages.JoinPartyLeaderCommMn
 }
 var file_messages_join_party_mn_proto_depIdxs = []int32{
-	0, // 0: messages.JoinPartyLeaderCommMn.type:type_name -> messages.JoinPartyLeaderCommMn.ResponseType
+	0, // 0: messages.JoinPartyLeaderCommMn.type:type_name -> messages.JoinPartyLeaderCommMn.ResponseTypeMn
 	1, // [1:1] is the sub-list for method output_type
 	1, // [1:1] is the sub-list for method input_type
 	1, // [1:1] is the sub-list for extension type_name
