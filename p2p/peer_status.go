@@ -14,7 +14,7 @@ type PeerStatus struct {
 	peerStatusLock *sync.RWMutex
 	notify         chan bool
 	newFound       chan bool
-	leaderResponse *messages.JoinPartyLeaderComm
+	leaderResponse *messages.JoinPartyLeaderCommMn
 	leader         string
 	threshold      int
 	reqCount       int

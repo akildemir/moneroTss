@@ -4,11 +4,11 @@ option go_package = "github.com/akildemir/moneroTss/messages";
 
 package messages;
 
-message JoinPartyRequest {
+message JoinPartyRequestMn {
     string ID = 1; // the unique hash id
 }
 
-message JoinPartyLeaderComm {
+message JoinPartyLeaderCommMn {
     enum ResponseType {
         Unknown = 0;
         Success = 1;
