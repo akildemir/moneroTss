@@ -17,8 +17,8 @@ import (
 	"github.com/rs/zerolog/log"
 	"gitlab.com/thorchain/tss/monero-wallet-rpc/wallet"
 
-	"github.com/akildemir/moneroTss/messages"
 	"github.com/akildemir/moneroTss/p2p"
+	origmsg "gitlab.com/thorchain/tss/go-tss/messages"
 )
 
 var signatureNotifierProtocol protocol.ID = "/p2p/signatureNotifier"
@@ -69,7 +69,7 @@ func (s *SignatureNotifier) handleStream(stream network.Stream) {
 	if err != nil {
 		logger.Error().Err(err).Msgf("fail to write the reply to peer: %s", remotePeer)
 	}
-	var msg messages.KeysignSignature
+	var msg origmsg.KeysignSignature
 	if err := proto.Unmarshal(payload, &msg); err != nil {
 		logger.Err(err).Msg("fail to unmarshal join party request")
 		s.streamMgr.AddStream("UNKNOWN", stream)
@@ -77,7 +77,7 @@ func (s *SignatureNotifier) handleStream(stream network.Stream) {
 	}
 	s.streamMgr.AddStream(msg.ID, stream)
 	var signedTxHex MoneroSpendProof
-	if len(msg.Signature) > 0 && msg.KeysignStatus == messages.KeysignSignature_Success {
+	if len(msg.Signature) > 0 && msg.KeysignStatus == origmsg.KeysignSignature_Success {
 		if err := json.Unmarshal(msg.Signature, &signedTxHex); err != nil {
 			logger.Error().Err(err).Msg("fail to unmarshal signature data")
 			return
@@ -121,9 +121,9 @@ func (s *SignatureNotifier) sendOneMsgToPeer(m *signatureItem) error {
 	defer func() {
 		s.streamMgr.AddStream(m.messageID, stream)
 	}()
-	ks := &messages.KeysignSignature{
+	ks := &origmsg.KeysignSignature{
 		ID:            m.messageID,
-		KeysignStatus: messages.KeysignSignature_Failed,
+		KeysignStatus: origmsg.KeysignSignature_Failed,
 	}
 
 	if m.signedTx != nil {
@@ -132,7 +132,7 @@ func (s *SignatureNotifier) sendOneMsgToPeer(m *signatureItem) error {
 			return fmt.Errorf("fail to marshal signature data to bytes:%w", err)
 		}
 		ks.Signature = serialSignedTx
-		ks.KeysignStatus = messages.KeysignSignature_Success
+		ks.KeysignStatus = origmsg.KeysignSignature_Success
 	}
 	ksBuf, err := proto.Marshal(ks)
 	if err != nil {
