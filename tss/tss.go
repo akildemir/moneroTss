@@ -95,7 +95,7 @@ func NewTss(
 	}
 	tssServer := TssServer{
 		conf:              conf,
-		logger:            log.With().Str("module", "tss").Logger(),
+		logger:            log.With().Str("module", "tss_mn").Logger(),
 		p2pCommunication:  comm,
 		localNodePubKey:   pubKey,
 		preParams:         preParams,

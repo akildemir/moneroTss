@@ -69,37 +69,37 @@ func NewMetric() *Metric {
 		keygenCounter: prometheus.NewCounterVec(
 
 			prometheus.CounterOpts{
-				Namespace: "Tss",
-				Subsystem: "Tss",
-				Name:      "keygen",
-				Help:      "Tss keygen success and failure counter",
+				Namespace: "Tss_Mn",
+				Subsystem: "Tss_Mn",
+				Name:      "keygen_mn",
+				Help:      "Tss_Mn keygen success and failure counter",
 			},
 			[]string{"status"},
 		),
 
 		keysignCounter: prometheus.NewCounterVec(
 			prometheus.CounterOpts{
-				Namespace: "Tss",
-				Subsystem: "Tss",
-				Name:      "keysign",
-				Help:      "Tss keysign success and failure counter",
+				Namespace: "Tss_Mn",
+				Subsystem: "Tss_Mn",
+				Name:      "keysign_mn",
+				Help:      "Tss_Mn keysign success and failure counter",
 			},
 			[]string{"status"},
 		),
 
 		joinPartyCounter: prometheus.NewCounterVec(prometheus.CounterOpts{
-			Namespace: "Tss",
-			Subsystem: "Tss",
-			Name:      "join_party",
-			Help:      "Tss keygen join party success and failure counter",
+			Namespace: "Tss_Mn",
+			Subsystem: "Tss_Mn",
+			Name:      "join_party_mn",
+			Help:      "Tss_Mn keygen join party success and failure counter",
 		}, []string{
 			"type", "result",
 		}),
 
 		keyGenTime: prometheus.NewGauge(
 			prometheus.GaugeOpts{
-				Namespace: "Tss",
-				Subsystem: "Tss",
+				Namespace: "Tss_Mn",
+				Subsystem: "Tss_Mn",
 				Name:      "keygen_time",
 				Help:      "the time spend for the latest keygen",
 			},
@@ -107,22 +107,22 @@ func NewMetric() *Metric {
 
 		keySignTime: prometheus.NewGauge(
 			prometheus.GaugeOpts{
-				Namespace: "Tss",
-				Subsystem: "Tss",
-				Name:      "keysign_time",
+				Namespace: "Tss_Mn",
+				Subsystem: "Tss_Mn",
+				Name:      "keysign_time_mn",
 				Help:      "the time spend for the latest keysign",
 			},
 		),
 
 		joinPartyTime: prometheus.NewGaugeVec(
 			prometheus.GaugeOpts{
-				Namespace: "Tss",
-				Subsystem: "Tss",
-				Name:      "joinparty_time",
+				Namespace: "Tss_Mn",
+				Subsystem: "Tss_Mn",
+				Name:      "joinparty_time_mn",
 				Help:      "the time spend for the latest keysign/keygen join party",
 			}, []string{"type"}),
 
-		logger: log.With().Str("module", "tssMonitor").Logger(),
+		logger: log.With().Str("module", "tss_Mn Monitor").Logger(),
 	}
 	return &metrics
 }
