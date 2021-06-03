@@ -3,7 +3,7 @@ package blame
 import (
 	"sync"
 
-	"github.com/akildemir/moneroTss/messagesmn"
+	"github.com/akildemir/moneroTss/messages"
 )
 
 type RoundInfo struct {
@@ -12,18 +12,18 @@ type RoundInfo struct {
 }
 
 type RoundMgr struct {
-	storedMsg   map[string]*messagesmn.WireMessage
+	storedMsg   map[string]*messages.WireMessage
 	storeLocker *sync.Mutex
 }
 
 func NewTssRoundMgr() *RoundMgr {
 	return &RoundMgr{
 		storeLocker: &sync.Mutex{},
-		storedMsg:   make(map[string]*messagesmn.WireMessage),
+		storedMsg:   make(map[string]*messages.WireMessage),
 	}
 }
 
-func (tr *RoundMgr) Get(key string) *messagesmn.WireMessage {
+func (tr *RoundMgr) Get(key string) *messages.WireMessage {
 	tr.storeLocker.Lock()
 	defer tr.storeLocker.Unlock()
 	ret, ok := tr.storedMsg[key]
@@ -33,7 +33,7 @@ func (tr *RoundMgr) Get(key string) *messagesmn.WireMessage {
 	return ret
 }
 
-func (tr *RoundMgr) Set(key string, msg *messagesmn.WireMessage) {
+func (tr *RoundMgr) Set(key string, msg *messages.WireMessage) {
 	tr.storeLocker.Lock()
 	defer tr.storeLocker.Unlock()
 	tr.storedMsg[key] = msg

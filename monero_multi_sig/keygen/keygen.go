@@ -21,7 +21,7 @@ import (
 	"github.com/akildemir/moneroTss/blame"
 	"github.com/akildemir/moneroTss/common"
 	"github.com/akildemir/moneroTss/conversion"
-	"github.com/akildemir/moneroTss/messagesmn"
+	"github.com/akildemir/moneroTss/messages"
 	"github.com/akildemir/moneroTss/monero_multi_sig"
 	"github.com/akildemir/moneroTss/p2p"
 	"github.com/akildemir/moneroTss/storage"
@@ -42,7 +42,7 @@ type MoneroKeyGen struct {
 func NewMoneroKeyGen(localP2PID string,
 	conf common.TssConfig,
 	localNodePubKey string,
-	broadcastChan chan *messagesmn.BroadcastMsgChan,
+	broadcastChan chan *messages.BroadcastMsgChan,
 	stopChan chan struct{},
 	msgID string,
 	stateManager storage.LocalStateManager,
@@ -87,7 +87,7 @@ func (tKeyGen *MoneroKeyGen) packAndSend(info string, exchangeRound int, localPa
 		IsBroadcast: true,
 	}
 	tKeyGen.moneroCommonStruct.GetBlameMgr().SetLastMsg(msgType)
-	return tKeyGen.moneroCommonStruct.ProcessOutCh(msg, &r, msgType, messagesmn.TSSKeyGenMsg)
+	return tKeyGen.moneroCommonStruct.ProcessOutCh(msg, &r, msgType, messages.TSSKeyGenMsg)
 }
 
 func (tKeyGen *MoneroKeyGen) GenerateNewKey(keygenReq Request) (string, string, error) {
@@ -156,7 +156,7 @@ func (tKeyGen *MoneroKeyGen) GenerateNewKey(keygenReq Request) (string, string, 
 	var keyGenWg sync.WaitGroup
 	keyGenWg.Add(1)
 	go func() {
-		tKeyGen.moneroCommonStruct.ProcessInboundmessagesmn(tKeyGen.commStopChan, &keyGenWg, moneroShareChan)
+		tKeyGen.moneroCommonStruct.ProcessInboundmessages(tKeyGen.commStopChan, &keyGenWg, moneroShareChan)
 	}()
 
 	share, err := client.PrepareMultisig()

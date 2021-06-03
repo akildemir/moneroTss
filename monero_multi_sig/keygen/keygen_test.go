@@ -25,7 +25,7 @@ import (
 
 	"github.com/akildemir/moneroTss/common"
 	"github.com/akildemir/moneroTss/conversion"
-	"github.com/akildemir/moneroTss/messagesmn"
+	"github.com/akildemir/moneroTss/messages"
 	"github.com/akildemir/moneroTss/p2p"
 	"github.com/akildemir/moneroTss/storage"
 )
@@ -211,14 +211,14 @@ func (s *TssKeygenTestSuite) TestGenerateNewKey(c *C) {
 				s.stateMgrs[idx], s.nodePrivKeys[idx], s.comms[idx])
 			c.Assert(keygenInstance, NotNil)
 			keygenMsgChannel := keygenInstance.GetTssKeyGenChannels()
-			comm.SetSubscribe(messagesmn.TSSKeyGenMsg, messageID, keygenMsgChannel)
-			comm.SetSubscribe(messagesmn.TSSKeyGenVerMsg, messageID, keygenMsgChannel)
-			comm.SetSubscribe(messagesmn.TSSControlMsg, messageID, keygenMsgChannel)
-			comm.SetSubscribe(messagesmn.TSSTaskDone, messageID, keygenMsgChannel)
-			defer comm.CancelSubscribe(messagesmn.TSSKeyGenMsg, messageID)
-			defer comm.CancelSubscribe(messagesmn.TSSKeyGenVerMsg, messageID)
-			defer comm.CancelSubscribe(messagesmn.TSSControlMsg, messageID)
-			defer comm.CancelSubscribe(messagesmn.TSSTaskDone, messageID)
+			comm.SetSubscribe(messages.TSSKeyGenMsg, messageID, keygenMsgChannel)
+			comm.SetSubscribe(messages.TSSKeyGenVerMsg, messageID, keygenMsgChannel)
+			comm.SetSubscribe(messages.TSSControlMsg, messageID, keygenMsgChannel)
+			comm.SetSubscribe(messages.TSSTaskDone, messageID, keygenMsgChannel)
+			defer comm.CancelSubscribe(messages.TSSKeyGenMsg, messageID)
+			defer comm.CancelSubscribe(messages.TSSKeyGenVerMsg, messageID)
+			defer comm.CancelSubscribe(messages.TSSControlMsg, messageID)
+			defer comm.CancelSubscribe(messages.TSSTaskDone, messageID)
 			resp, _, err := keygenInstance.GenerateNewKey(reqs[idx])
 			c.Assert(err, IsNil)
 			lock.Lock()
@@ -264,14 +264,14 @@ func (s *TssKeygenTestSuite) TestGenerateNewKey(c *C) {
 //				s.nodePrivKeys[idx], s.comms[idx])
 //			c.Assert(keygenInstance, NotNil)
 //			keygenMsgChannel := keygenInstance.GetTssKeyGenChannels()
-//			comm.SetSubscribe(messagesmn.TSSKeyGenMsg, messageID, keygenMsgChannel)
-//			comm.SetSubscribe(messagesmn.TSSKeyGenVerMsg, messageID, keygenMsgChannel)
-//			comm.SetSubscribe(messagesmn.TSSControlMsg, messageID, keygenMsgChannel)
-//			comm.SetSubscribe(messagesmn.TSSTaskDone, messageID, keygenMsgChannel)
-//			defer comm.CancelSubscribe(messagesmn.TSSKeyGenMsg, messageID)
-//			defer comm.CancelSubscribe(messagesmn.TSSKeyGenVerMsg, messageID)
-//			defer comm.CancelSubscribe(messagesmn.TSSControlMsg, messageID)
-//			defer comm.CancelSubscribe(messagesmn.TSSTaskDone, messageID)
+//			comm.SetSubscribe(messages.TSSKeyGenMsg, messageID, keygenMsgChannel)
+//			comm.SetSubscribe(messages.TSSKeyGenVerMsg, messageID, keygenMsgChannel)
+//			comm.SetSubscribe(messages.TSSControlMsg, messageID, keygenMsgChannel)
+//			comm.SetSubscribe(messages.TSSTaskDone, messageID, keygenMsgChannel)
+//			defer comm.CancelSubscribe(messages.TSSKeyGenMsg, messageID)
+//			defer comm.CancelSubscribe(messages.TSSKeyGenVerMsg, messageID)
+//			defer comm.CancelSubscribe(messages.TSSControlMsg, messageID)
+//			defer comm.CancelSubscribe(messages.TSSTaskDone, messageID)
 //			if idx == 1 {
 //				go func() {
 //					time.Sleep(time.Millisecond * 200)
@@ -308,12 +308,12 @@ func (s *TssKeygenTestSuite) TestGenerateNewKey(c *C) {
 //	stateManager := &storage.MockLocalStateManager{}
 //	keyGenInstance := NewMoneroKeyGen("", conf, "", nil, nil, nil, "test", stateManager, s.nodePrivKeys[0], s.comms[0])
 //
-//	taskDone := messagesmn.TssTaskNotifier{TaskDone: true}
+//	taskDone := messages.TssTaskNotifier{TaskDone: true}
 //	taskDoneBytes, err := json.Marshal(taskDone)
 //	c.Assert(err, IsNil)
 //
-//	msg := &messagesmn.WrappedMessage{
-//		MessageType: messagesmn.TSSTaskDone,
+//	msg := &messages.WrappedMessage{
+//		MessageType: messages.TSSTaskDone,
 //		MsgID:       "test",
 //		Payload:     taskDoneBytes,
 //	}

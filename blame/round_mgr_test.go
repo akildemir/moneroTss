@@ -3,7 +3,7 @@ package blame
 import (
 	. "gopkg.in/check.v1"
 
-	"github.com/akildemir/moneroTss/messagesmn"
+	"github.com/akildemir/moneroTss/messages"
 )
 
 type RoundMgrSuite struct{}
@@ -12,14 +12,14 @@ var _ = Suite(&RoundMgrSuite{})
 
 func (ShareMgrSuite) TestTssRoundMgr(c *C) {
 	mgr := NewTssRoundMgr()
-	w1 := messagesmn.WireMessage{
+	w1 := messages.WireMessage{
 		Routing:   nil,
 		RoundInfo: "test1",
 		Message:   nil,
 		Sig:       nil,
 	}
 	mgr.Set("test1", &w1)
-	w2 := messagesmn.WireMessage{
+	w2 := messages.WireMessage{
 		Routing:   nil,
 		RoundInfo: "test2",
 		Message:   nil,
@@ -27,7 +27,7 @@ func (ShareMgrSuite) TestTssRoundMgr(c *C) {
 	}
 
 	mgr.Set("test2", &w2)
-	w3 := messagesmn.WireMessage{
+	w3 := messages.WireMessage{
 		Routing:   nil,
 		RoundInfo: "test3",
 		Message:   nil,

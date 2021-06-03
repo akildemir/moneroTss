@@ -6,7 +6,7 @@ import (
 	"github.com/akildemir/moneroTss/blame"
 	"github.com/akildemir/moneroTss/common"
 	"github.com/akildemir/moneroTss/conversion"
-	"github.com/akildemir/moneroTss/messagesmn"
+	"github.com/akildemir/moneroTss/messages"
 	"github.com/akildemir/moneroTss/monero_multi_sig/keygen"
 )
 
@@ -29,16 +29,16 @@ func (t *TssServer) Keygen(req keygen.Request) (keygen.Response, error) {
 		t.stateManager, t.privateKey, t.p2pCommunication)
 
 	keygenMsgChannel := keygenInstance.GetTssKeyGenChannels()
-	t.p2pCommunication.SetSubscribe(messagesmn.TSSKeyGenMsg, msgID, keygenMsgChannel)
-	t.p2pCommunication.SetSubscribe(messagesmn.TSSKeyGenVerMsg, msgID, keygenMsgChannel)
-	t.p2pCommunication.SetSubscribe(messagesmn.TSSControlMsg, msgID, keygenMsgChannel)
-	t.p2pCommunication.SetSubscribe(messagesmn.TSSTaskDone, msgID, keygenMsgChannel)
+	t.p2pCommunication.SetSubscribe(messages.TSSKeyGenMsg, msgID, keygenMsgChannel)
+	t.p2pCommunication.SetSubscribe(messages.TSSKeyGenVerMsg, msgID, keygenMsgChannel)
+	t.p2pCommunication.SetSubscribe(messages.TSSControlMsg, msgID, keygenMsgChannel)
+	t.p2pCommunication.SetSubscribe(messages.TSSTaskDone, msgID, keygenMsgChannel)
 
 	defer func() {
-		t.p2pCommunication.CancelSubscribe(messagesmn.TSSKeyGenMsg, msgID)
-		t.p2pCommunication.CancelSubscribe(messagesmn.TSSKeyGenVerMsg, msgID)
-		t.p2pCommunication.CancelSubscribe(messagesmn.TSSControlMsg, msgID)
-		t.p2pCommunication.CancelSubscribe(messagesmn.TSSTaskDone, msgID)
+		t.p2pCommunication.CancelSubscribe(messages.TSSKeyGenMsg, msgID)
+		t.p2pCommunication.CancelSubscribe(messages.TSSKeyGenVerMsg, msgID)
+		t.p2pCommunication.CancelSubscribe(messages.TSSControlMsg, msgID)
+		t.p2pCommunication.CancelSubscribe(messages.TSSTaskDone, msgID)
 
 		t.p2pCommunication.ReleaseStream(msgID)
 		t.partyCoordinator.ReleaseStream(msgID)

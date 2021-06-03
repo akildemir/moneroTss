@@ -9,7 +9,7 @@ import (
 	"github.com/libp2p/go-libp2p-core/peer"
 
 	"github.com/akildemir/moneroTss/conversion"
-	"github.com/akildemir/moneroTss/messagesmn"
+	"github.com/akildemir/moneroTss/messages"
 )
 
 func (m *Manager) tssTimeoutBlame(lastMessageType string, partyIDMap map[string]*btss.PartyID) ([]string, error) {
@@ -115,7 +115,7 @@ func (m *Manager) GetBroadcastBlame(lastMessageType string) ([]Node, error) {
 }
 
 // this blame blames the node who provide the wrong share
-func (m *Manager) TssWrongShareBlame(wiredMsg *messagesmn.WireMessage) (string, error) {
+func (m *Manager) TssWrongShareBlame(wiredMsg *messages.WireMessage) (string, error) {
 	shareOwner := wiredMsg.Routing.From
 	owner, ok := m.partyInfo.PartyIDMap[shareOwner.Id]
 	if !ok {
@@ -147,14 +147,14 @@ func (m *Manager) TssMissingShareBlame(rounds int) ([]Node, bool, error) {
 			continue
 		}
 		// we find whether the missing share is in unicast
-		if rounds == messagesmn.TSSKEYGENROUNDS {
+		if rounds == messages.TSSKEYGENROUNDS {
 			// we are processing the keygen and if the missing shares is in second round(index=1)
 			// we mark it as the unicast.
 			if index == 1 {
 				isUnicast = true
 			}
 		}
-		if rounds == messagesmn.TSSKEYSIGNROUNDS {
+		if rounds == messages.TSSKEYSIGNROUNDS {
 			// we are processing the keysign and if the missing shares is in the 5 round(index<1)
 			// we all mark it as the unicast, because in some cases, the error will be detected
 			// in the following round, so we cannot "trust" the node stops at the current round.

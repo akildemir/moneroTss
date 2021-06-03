@@ -2,7 +2,7 @@ syntax = "proto3";
 
 option go_package = "github.com/akildemir/moneroTss/messages";
 
-package messagesmn;
+package messages;
 
 message KeysignSignature {
     enum Status {

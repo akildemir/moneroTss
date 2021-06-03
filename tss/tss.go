@@ -18,7 +18,7 @@ import (
 
 	"github.com/akildemir/moneroTss/common"
 	"github.com/akildemir/moneroTss/conversion"
-	"github.com/akildemir/moneroTss/messagesmn"
+	"github.com/akildemir/moneroTss/messages"
 	moneroKeyGen "github.com/akildemir/moneroTss/monero_multi_sig/keygen"
 	moneroKeySign "github.com/akildemir/moneroTss/monero_multi_sig/keysign"
 	"github.com/akildemir/moneroTss/monitor"
@@ -157,7 +157,7 @@ func (t *TssServer) requestToMsgId(request interface{}) (string, error) {
 }
 
 func (t *TssServer) joinParty(msgID, version string, blockHeight int64, participants []string, threshold int, sigChan chan string) ([]peer.ID, string, error) {
-	oldJoinParty, err := conversion.VersionLTCheck(version, messagesmn.NEWJOINPARTYVERSION)
+	oldJoinParty, err := conversion.VersionLTCheck(version, messages.NEWJOINPARTYVERSION)
 	if err != nil {
 		return nil, "", fmt.Errorf("fail to parse the version with error:%w", err)
 	}

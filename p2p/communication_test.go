@@ -10,7 +10,7 @@ import (
 	"github.com/libp2p/go-libp2p-core/crypto"
 	. "gopkg.in/check.v1"
 
-	"github.com/akildemir/moneroTss/messagesmn"
+	"github.com/akildemir/moneroTss/messages"
 )
 
 type CommunicationTestSuite struct{}
@@ -21,12 +21,12 @@ func (CommunicationTestSuite) TestBasicCommunication(c *C) {
 	comm, err := NewCommunication("rendezvous", nil, 6668, "")
 	c.Assert(err, IsNil)
 	c.Assert(comm, NotNil)
-	comm.SetSubscribe(messagesmn.TSSKeyGenMsg, "hello", make(chan *Message))
-	c.Assert(comm.getSubscriber(messagesmn.TSSKeySignMsg, "hello"), IsNil)
-	c.Assert(comm.getSubscriber(messagesmn.TSSKeyGenMsg, "hello"), NotNil)
-	comm.CancelSubscribe(messagesmn.TSSKeyGenMsg, "hello")
-	comm.CancelSubscribe(messagesmn.TSSKeyGenMsg, "whatever")
-	comm.CancelSubscribe(messagesmn.TSSKeySignMsg, "asdsdf")
+	comm.SetSubscribe(messages.TSSKeyGenMsg, "hello", make(chan *Message))
+	c.Assert(comm.getSubscriber(messages.TSSKeySignMsg, "hello"), IsNil)
+	c.Assert(comm.getSubscriber(messages.TSSKeyGenMsg, "hello"), NotNil)
+	comm.CancelSubscribe(messages.TSSKeyGenMsg, "hello")
+	comm.CancelSubscribe(messages.TSSKeyGenMsg, "whatever")
+	comm.CancelSubscribe(messages.TSSKeySignMsg, "asdsdf")
 }
 
 func checkExist(a []maddr.Multiaddr, b string) bool {

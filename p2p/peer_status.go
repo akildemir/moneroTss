@@ -6,7 +6,7 @@ import (
 
 	"github.com/libp2p/go-libp2p-core/peer"
 
-	"github.com/akildemir/moneroTss/messagesmn"
+	origmsg "gitlab.com/thorchain/tss/go-tss/messages"
 )
 
 type PeerStatus struct {
@@ -14,7 +14,7 @@ type PeerStatus struct {
 	peerStatusLock *sync.RWMutex
 	notify         chan bool
 	newFound       chan bool
-	leaderResponse *messagesmn.JoinPartyLeaderCommMn
+	leaderResponse *origmsg.JoinPartyLeaderComm
 	leader         string
 	threshold      int
 	reqCount       int

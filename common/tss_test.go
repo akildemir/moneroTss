@@ -22,7 +22,7 @@ import (
 
 	"github.com/akildemir/moneroTss/blame"
 	"github.com/akildemir/moneroTss/conversion"
-	"github.com/akildemir/moneroTss/messagesmn"
+	"github.com/akildemir/moneroTss/messages"
 	"github.com/akildemir/moneroTss/p2p"
 )
 
@@ -121,11 +121,11 @@ func (t *TssTestSuite) TestTssProcessOutCh(c *C) {
 	tssMsg := btss.NewMessage(messageRouting, testContent, msg)
 	tssCommonStruct := NewTssCommon("", nil, conf, "test", t.privKey)
 	data, r, _ := tssMsg.WireBytes()
-	err = tssCommonStruct.ProcessOutCh(data, r, "test", messagesmn.TSSKeyGenMsg)
+	err = tssCommonStruct.ProcessOutCh(data, r, "test", messages.TSSKeyGenMsg)
 	c.Assert(err, IsNil)
 }
 
-func fabricateTssMsg(c *C, privKey tcrypto.PrivKey, partyID *btss.PartyID, roundInfo, msg, msgID string, msgType messagesmn.THORChainTSSMessageType) *messagesmn.WrappedMessage {
+func fabricateTssMsg(c *C, privKey tcrypto.PrivKey, partyID *btss.PartyID, roundInfo, msg, msgID string, msgType messages.THORChainTSSMessageType) *messages.WrappedMessage {
 	routingInfo := btss.MessageRouting{
 		From:                    partyID,
 		To:                      nil,
@@ -138,7 +138,7 @@ func fabricateTssMsg(c *C, privKey tcrypto.PrivKey, partyID *btss.PartyID, round
 	dataForSign.WriteString(msgID)
 	sig, err := privKey.Sign(dataForSign.Bytes())
 	c.Assert(err, IsNil)
-	wiredMessage := messagesmn.WireMessage{
+	wiredMessage := messages.WireMessage{
 		Routing:   &routingInfo,
 		RoundInfo: roundInfo,
 		Message:   []byte(msg),
@@ -147,23 +147,23 @@ func fabricateTssMsg(c *C, privKey tcrypto.PrivKey, partyID *btss.PartyID, round
 
 	marshaledMsg, err := json.Marshal(wiredMessage)
 	c.Assert(err, IsNil)
-	wrappedMsg := messagesmn.WrappedMessage{
+	wrappedMsg := messages.WrappedMessage{
 		MessageType: msgType,
 		Payload:     marshaledMsg,
 	}
 	return &wrappedMsg
 }
 
-func fabricateVerMsg(c *C, hash, hashKey string) *messagesmn.WrappedMessage {
-	broadcastConfirmMsg := &messagesmn.BroadcastConfirmMessage{
+func fabricateVerMsg(c *C, hash, hashKey string) *messages.WrappedMessage {
+	broadcastConfirmMsg := &messages.BroadcastConfirmMessage{
 		P2PID: "",
 		Key:   hashKey,
 		Hash:  hash,
 	}
 	marshaledMsg, err := json.Marshal(broadcastConfirmMsg)
 	c.Assert(err, IsNil)
-	wrappedMsg := messagesmn.WrappedMessage{
-		MessageType: messagesmn.TSSKeyGenVerMsg,
+	wrappedMsg := messages.WrappedMessage{
+		MessageType: messages.TSSKeyGenVerMsg,
 		Payload:     marshaledMsg,
 	}
 	return &wrappedMsg
@@ -174,7 +174,7 @@ func (t *TssTestSuite) testVerMsgDuplication(c *C, privKey tcrypto.PrivKey, tssC
 	roundInfo := "round testVerMsgDuplication"
 	tssCommonStruct.msgID = "123"
 	msgKey := fmt.Sprintf("%s-%s", senderID.Id, roundInfo)
-	wrappedMsg := fabricateTssMsg(c, privKey, senderID, roundInfo, testMsg, tssCommonStruct.msgID, messagesmn.TSSKeyGenMsg)
+	wrappedMsg := fabricateTssMsg(c, privKey, senderID, roundInfo, testMsg, tssCommonStruct.msgID, messages.TSSKeyGenMsg)
 	err := tssCommonStruct.ProcessOneMessage(wrappedMsg, tssCommonStruct.PartyIDtoP2PID[partiesID[1].Id].String(), nil)
 	c.Assert(err, IsNil)
 	localItem := tssCommonStruct.TryGetLocalCacheItem(msgKey)
@@ -220,7 +220,7 @@ func (t *TssTestSuite) testDropMsgOwner(c *C, privKey tcrypto.PrivKey, tssCommon
 	msgHash, err := conversion.BytesToHashString([]byte(testMsg))
 	c.Assert(err, IsNil)
 	msgKey := fmt.Sprintf("%s-%s", senderID.Id, roundInfo)
-	senderMsg := fabricateTssMsg(c, privKey, senderID, roundInfo, testMsg, "123", messagesmn.TSSKeyGenMsg)
+	senderMsg := fabricateTssMsg(c, privKey, senderID, roundInfo, testMsg, "123", messages.TSSKeyGenMsg)
 
 	senderPeer, err := conversion.GetPeerIDFromPartyID(senderID)
 	c.Assert(err, IsNil)
@@ -254,16 +254,16 @@ func (t *TssTestSuite) testDropMsgOwner(c *C, privKey tcrypto.PrivKey, tssCommon
 }
 
 func (t *TssTestSuite) testProcessControlMsg(c *C, tssCommonStruct *TssCommon) {
-	controlMsg := messagesmn.TssControl{
+	controlMsg := messages.TssControl{
 		ReqHash:     "testHash",
 		ReqKey:      "testKey",
-		RequestType: messagesmn.TSSKeyGenMsg,
+		RequestType: messages.TSSKeyGenMsg,
 		Msg:         nil,
 	}
 	payload, err := json.Marshal(controlMsg)
 	c.Assert(err, IsNil)
-	wrappedMsg := messagesmn.WrappedMessage{
-		MessageType: messagesmn.TSSControlMsg,
+	wrappedMsg := messages.WrappedMessage{
+		MessageType: messages.TSSControlMsg,
 		Payload:     payload,
 	}
 
@@ -273,22 +273,22 @@ func (t *TssTestSuite) testProcessControlMsg(c *C, tssCommonStruct *TssCommon) {
 	c.Assert(err, IsNil)
 	tssCommonStruct.blameMgr.GetShareMgr().Set("testHash")
 
-	msg := messagesmn.WireMessage{
+	msg := messages.WireMessage{
 		Routing:   nil,
 		RoundInfo: "",
 		Message:   []byte("test"),
 		Sig:       []byte("test"),
 	}
-	controlMsg = messagesmn.TssControl{
+	controlMsg = messages.TssControl{
 		ReqHash:     "testHash",
 		ReqKey:      "testKey",
-		RequestType: messagesmn.TSSKeyGenMsg,
+		RequestType: messages.TSSKeyGenMsg,
 		Msg:         &msg,
 	}
 	payload, err = json.Marshal(controlMsg)
 	c.Assert(err, IsNil)
-	wrappedMsg = messagesmn.WrappedMessage{
-		MessageType: messagesmn.TSSControlMsg,
+	wrappedMsg = messages.WrappedMessage{
+		MessageType: messages.TSSControlMsg,
 		Payload:     payload,
 	}
 
@@ -297,11 +297,11 @@ func (t *TssTestSuite) testProcessControlMsg(c *C, tssCommonStruct *TssCommon) {
 }
 
 func (t *TssTestSuite) testProcessTaskDone(c *C, tssCommonStruct *TssCommon) {
-	taskDone := messagesmn.TssTaskNotifier{TaskDone: true}
+	taskDone := messages.TssTaskNotifier{TaskDone: true}
 	marshaledMsg, err := json.Marshal(taskDone)
 	c.Assert(err, IsNil)
-	wrappedMsg := messagesmn.WrappedMessage{
-		MessageType: messagesmn.TSSTaskDone,
+	wrappedMsg := messages.WrappedMessage{
+		MessageType: messages.TSSTaskDone,
 		Payload:     marshaledMsg,
 	}
 	wg := sync.WaitGroup{}
@@ -348,7 +348,7 @@ func (t *TssTestSuite) testVerMsgAndUpdate(c *C, tssCommonStruct *TssCommon, sen
 	msgHash, err := conversion.BytesToHashString([]byte(testMsg))
 	c.Assert(err, IsNil)
 	msgKey := fmt.Sprintf("%s-%s", senderID.Id, roundInfo)
-	wrappedMsg := fabricateTssMsg(c, t.privKey, senderID, roundInfo, testMsg, "123", messagesmn.TSSKeyGenMsg)
+	wrappedMsg := fabricateTssMsg(c, t.privKey, senderID, roundInfo, testMsg, "123", messages.TSSKeyGenMsg)
 	// you can pass any p2pID in Tss message
 	err = tssCommonStruct.ProcessOneMessage(wrappedMsg, tssCommonStruct.PartyIDtoP2PID[senderID.Id].String(), nil)
 	c.Assert(err, IsNil)
@@ -395,7 +395,7 @@ func (t *TssTestSuite) TestTssCommon(c *C) {
 	c.Assert(err, IsNil)
 	peerID, err := conversion.GetPeerIDFromSecp256PubKey(pk.Bytes())
 	c.Assert(err, IsNil)
-	broadcastChannel := make(chan *messagesmn.BroadcastMsgChan)
+	broadcastChannel := make(chan *messages.BroadcastMsgChan)
 	sk := secp256k1.GenPrivKey()
 	tssCommon := NewTssCommon(peerID.String(), broadcastChannel, TssConfig{}, "message-id", sk)
 	c.Assert(tssCommon, NotNil)
@@ -403,11 +403,11 @@ func (t *TssTestSuite) TestTssCommon(c *C) {
 	wg := sync.WaitGroup{}
 	wg.Add(1)
 	go func() {
-		tssCommon.ProcessInboundmessagesmn(stopchan, &wg, nil)
+		tssCommon.ProcessInboundmessages(stopchan, &wg, nil)
 	}()
 	bi, err := MsgToHashInt([]byte("whatever"))
 	c.Assert(err, IsNil)
-	wrapMsg := fabricateTssMsg(c, sk, btss.NewPartyID("1,", "test", bi), "roundInfo", "message", "123", messagesmn.TSSKeyGenMsg)
+	wrapMsg := fabricateTssMsg(c, sk, btss.NewPartyID("1,", "test", bi), "roundInfo", "message", "123", messages.TSSKeyGenMsg)
 	buf, err := json.Marshal(wrapMsg)
 	c.Assert(err, IsNil)
 	pMsg := &p2p.Message{
@@ -431,9 +431,9 @@ func (t *TssTestSuite) TestProcessInvalidMsgBlame(c *C) {
 	testMsg := "testVerMsgDuplication"
 	roundInfo := "round testMessage"
 	tssCommonStruct.msgID = "123"
-	wrappedMsg := fabricateTssMsg(c, t.privKey, sender, roundInfo, testMsg, tssCommonStruct.msgID, messagesmn.TSSKeyGenMsg)
+	wrappedMsg := fabricateTssMsg(c, t.privKey, sender, roundInfo, testMsg, tssCommonStruct.msgID, messages.TSSKeyGenMsg)
 
-	var wiredMsg messagesmn.WireMessage
+	var wiredMsg messages.WireMessage
 	err := json.Unmarshal(wrappedMsg.Payload, &wiredMsg)
 	c.Assert(err, IsNil)
 	culprits := peerPartiesID[:3]

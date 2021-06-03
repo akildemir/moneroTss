@@ -16,7 +16,8 @@ import (
 	"google.golang.org/protobuf/proto"
 
 	"github.com/akildemir/moneroTss/conversion"
-	"github.com/akildemir/moneroTss/messagesmn"
+
+	origmsg "gitlab.com/thorchain/tss/go-tss/messages"
 )
 
 var (
@@ -64,7 +65,7 @@ func (pc *PartyCoordinator) Stop() {
 	close(pc.stopChan)
 }
 
-func (pc *PartyCoordinator) processRespMsg(respMsg *messagesmn.JoinPartyLeaderCommMn, stream network.Stream) {
+func (pc *PartyCoordinator) processRespMsg(respMsg *origmsg.JoinPartyLeaderComm, stream network.Stream) {
 	pc.streamMgr.AddStream(respMsg.ID, stream)
 
 	remotePeer := stream.Conn().RemotePeer().String()
@@ -89,7 +90,7 @@ func (pc *PartyCoordinator) processRespMsg(respMsg *messagesmn.JoinPartyLeaderCo
 	return
 }
 
-func (pc *PartyCoordinator) processReqMsg(requestMsg *messagesmn.JoinPartyLeaderCommMn, stream network.Stream) {
+func (pc *PartyCoordinator) processReqMsg(requestMsg *origmsg.JoinPartyLeaderComm, stream network.Stream) {
 	pc.streamMgr.AddStream(requestMsg.ID, stream)
 	pc.joinPartyGroupLock.Lock()
 	peerGroup, ok := pc.peersGroup[requestMsg.ID]
@@ -119,7 +120,7 @@ func (pc *PartyCoordinator) HandleStream(stream network.Stream) {
 		pc.streamMgr.AddStream("UNKNOWN", stream)
 		return
 	}
-	var msg messagesmn.JoinPartyRequestMn
+	var msg origmsg.JoinPartyRequest
 	if err := proto.Unmarshal(payload, &msg); err != nil {
 		logger.Err(err).Msg("fail to unmarshal join party request")
 		pc.streamMgr.AddStream("UNKNOWN", stream)
@@ -155,14 +156,14 @@ func (pc *PartyCoordinator) HandleStreamWithLeader(stream network.Stream) {
 		return
 	}
 
-	var msgLeaderless messagesmn.JoinPartyRequestMn
+	var msgLeaderless origmsg.JoinPartyRequest
 	if err := proto.Unmarshal(payload, &msgLeaderless); err != nil {
 		logger.Err(err).Msg("fail to unmarshal join party request")
 		pc.streamMgr.AddStream("UNKNOWN", stream)
 		return
 	}
 
-	var msg messagesmn.JoinPartyLeaderCommMn
+	var msg origmsg.JoinPartyLeaderComm
 	err = proto.Unmarshal(payload, &msg)
 	if err != nil {
 		logger.Err(err).Msg("fail to unmarshal party data")
@@ -218,7 +219,7 @@ func (pc *PartyCoordinator) getPeerIDs(ids []string) ([]peer.ID, error) {
 	return result, nil
 }
 
-func (pc *PartyCoordinator) sendResponseToAll(msg *messagesmn.JoinPartyLeaderCommMn, peers []peer.ID) {
+func (pc *PartyCoordinator) sendResponseToAll(msg *origmsg.JoinPartyLeaderComm, peers []peer.ID) {
 	msg.MsgType = "response"
 	msgSend, err := proto.Marshal(msg)
 	if err != nil {
@@ -241,7 +242,7 @@ func (pc *PartyCoordinator) sendResponseToAll(msg *messagesmn.JoinPartyLeaderCom
 	wg.Wait()
 }
 
-func (pc *PartyCoordinator) sendRequestToLeader(msg *messagesmn.JoinPartyLeaderCommMn, leader peer.ID) error {
+func (pc *PartyCoordinator) sendRequestToLeader(msg *origmsg.JoinPartyLeaderComm, leader peer.ID) error {
 	msg.MsgType = "request"
 	msgSend, err := proto.Marshal(msg)
 	if err != nil {
@@ -334,7 +335,7 @@ func (pc *PartyCoordinator) joinPartyMember(msgID string, leader string, thresho
 		return nil, fmt.Errorf("fail to decode peer id(%s):%w", leader, err)
 	}
 	peerGroup.leader = leader
-	msg := messagesmn.JoinPartyLeaderCommMn{
+	msg := origmsg.JoinPartyLeaderComm{
 		ID: msgID,
 	}
 
@@ -405,7 +406,7 @@ func (pc *PartyCoordinator) joinPartyMember(msgID string, leader string, thresho
 		return pIDs, errors.New("not enough peer")
 	}
 
-	if peerGroup.leaderResponse.Type == messagesmn.JoinPartyLeaderCommMn_Success {
+	if peerGroup.leaderResponse.Type == origmsg.JoinPartyLeaderComm_Success {
 		return pIDs, nil
 	}
 	pc.logger.Error().Msg("leader response with join party timeout")
@@ -456,15 +457,15 @@ func (pc *PartyCoordinator) joinPartyLeader(msgID string, peers []string, thresh
 		tssNodes[i] = el.String()
 	}
 
-	msg := messagesmn.JoinPartyLeaderCommMn{
+	msg := origmsg.JoinPartyLeaderComm{
 		ID:      msgID,
-		Type:    messagesmn.JoinPartyLeaderCommMn_Success,
+		Type:    origmsg.JoinPartyLeaderComm_Success,
 		PeerIDs: tssNodes,
 	}
 	// we put ourselves(leader) in the online list, so need threshold +1
 	if len(onlinePeers) < threshold+1 {
 		// we notify the failure of the join party to everyone
-		msg.Type = messagesmn.JoinPartyLeaderCommMn_Timeout
+		msg.Type = origmsg.JoinPartyLeaderComm_Timeout
 		pc.sendResponseToAll(&msg, allPeers)
 		return onlinePeers, ErrJoinPartyTimeout
 	}
@@ -490,7 +491,7 @@ func (pc *PartyCoordinator) JoinPartyWithLeader(msgID string, blockHeight int64,
 
 // JoinPartyWithRetry this method provide the functionality to join party with retry and back off
 func (pc *PartyCoordinator) JoinPartyWithRetry(msgID string, peers []string) ([]peer.ID, error) {
-	msg := messagesmn.JoinPartyRequestMn{
+	msg := origmsg.JoinPartyRequest{
 		ID: msgID,
 	}
 	msgSend, err := proto.Marshal(&msg)

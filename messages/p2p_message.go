@@ -1,4 +1,4 @@
-package messagesmn
+package messages
 
 import (
 	"fmt"

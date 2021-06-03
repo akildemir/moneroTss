@@ -24,7 +24,7 @@ import (
 	"github.com/akildemir/moneroTss/blame"
 	"github.com/akildemir/moneroTss/common"
 	"github.com/akildemir/moneroTss/conversion"
-	"github.com/akildemir/moneroTss/messagesmn"
+	"github.com/akildemir/moneroTss/messages"
 	"github.com/akildemir/moneroTss/monero_multi_sig"
 	"github.com/akildemir/moneroTss/p2p"
 	"github.com/akildemir/moneroTss/storage"
@@ -51,7 +51,7 @@ type MoneroSpendProof struct {
 
 func NewMoneroKeySign(localP2PID string,
 	conf common.TssConfig,
-	broadcastChan chan *messagesmn.BroadcastMsgChan,
+	broadcastChan chan *messages.BroadcastMsgChan,
 	stopChan chan struct{}, msgID string, privKey tcrypto.PrivKey, p2pComm *p2p.Communication, rpcAddress string) (*MoneroKeySign, moneroWallet.Client, error) {
 	logItems := []string{"keySign", msgID}
 
@@ -143,14 +143,14 @@ func (tKeySign *MoneroKeySign) packAndSend(info string, exchangeRound int, local
 			From:        localPartyID,
 			IsBroadcast: true,
 		}
-		return tKeySign.moneroCommonStruct.ProcessOutCh(msg, &r, roundInfo, messagesmn.TSSKeySignMsg)
+		return tKeySign.moneroCommonStruct.ProcessOutCh(msg, &r, roundInfo, messages.TSSKeySignMsg)
 	}
 	r := btss.MessageRouting{
 		From:        localPartyID,
 		To:          []*btss.PartyID{toParty},
 		IsBroadcast: false,
 	}
-	return tKeySign.moneroCommonStruct.ProcessOutCh(msg, &r, roundInfo, messagesmn.TSSKeySignMsg)
+	return tKeySign.moneroCommonStruct.ProcessOutCh(msg, &r, roundInfo, messages.TSSKeySignMsg)
 }
 
 func (tKeySign *MoneroKeySign) submitSignature(signature string) ([]string, error) {
@@ -354,7 +354,7 @@ func (tKeySign *MoneroKeySign) SignMessage(encodedTx string, parties []string) (
 
 	keySignWg.Add(1)
 	go func() {
-		tKeySign.moneroCommonStruct.ProcessInboundmessagesmn(tKeySign.commStopChan, &keySignWg, moneroShareChan)
+		tKeySign.moneroCommonStruct.ProcessInboundmessages(tKeySign.commStopChan, &keySignWg, moneroShareChan)
 	}()
 
 	// we exchange the keysign preparation info
