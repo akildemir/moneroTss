@@ -77,8 +77,8 @@ func (s *SignatureNotifier) handleStream(stream network.Stream) {
 	}
 	s.streamMgr.AddStream(msg.ID, stream)
 	var signedTxHex MoneroSpendProof
-	if len(msg.Signature) > 0 && msg.KeysignStatus == origmsg.KeysignSignature_Success {
-		if err := json.Unmarshal(msg.Signature, &signedTxHex); err != nil {
+	if len(msg.Signatures) > 0 && msg.KeysignStatus == origmsg.KeysignSignature_Success {
+		if err := json.Unmarshal(msg.Signatures[0], &signedTxHex); err != nil {
 			logger.Error().Err(err).Msg("fail to unmarshal signature data")
 			return
 		}
@@ -131,7 +131,7 @@ func (s *SignatureNotifier) sendOneMsgToPeer(m *signatureItem) error {
 		if err != nil {
 			return fmt.Errorf("fail to marshal signature data to bytes:%w", err)
 		}
-		ks.Signature = serialSignedTx
+		ks.Signatures[0] = serialSignedTx
 		ks.KeysignStatus = origmsg.KeysignSignature_Success
 	}
 	ksBuf, err := proto.Marshal(ks)
