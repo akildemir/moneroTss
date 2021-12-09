@@ -15,9 +15,9 @@ import (
 	"time"
 
 	btsskeygen "github.com/binance-chain/tss-lib/ecdsa/keygen"
+	"github.com/haven-protocol-org/go-haven-rpc-client/wallet"
 	maddr "github.com/multiformats/go-multiaddr"
 	"github.com/rs/zerolog/log"
-	"gitlab.com/thorchain/tss/monero-wallet-rpc/wallet"
 	. "gopkg.in/check.v1"
 
 	"github.com/akildemir/moneroTss/common"

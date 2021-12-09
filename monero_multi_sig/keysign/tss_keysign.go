@@ -16,10 +16,10 @@ import (
 	coskey "github.com/cosmos/cosmos-sdk/crypto/keys/secp256k1"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	set "github.com/deckarep/golang-set"
+	moneroWallet "github.com/haven-protocol-org/go-haven-rpc-client/wallet"
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
 	tcrypto "github.com/tendermint/tendermint/crypto"
-	moneroWallet "gitlab.com/thorchain/tss/monero-wallet-rpc/wallet"
 
 	"github.com/akildemir/moneroTss/blame"
 	"github.com/akildemir/moneroTss/common"
@@ -445,9 +445,9 @@ func (tKeySign *MoneroKeySign) SignMessage(encodedTx string, parties []string) (
 							// we will handle the error in the upper level
 							return
 						}
-						leaderShare = responseTransfer.MultisigTxset
+						leaderShare = responseTransfer.MultisigTxSet
 						myShare = leaderShare
-						err = tKeySign.packAndSend(responseTransfer.MultisigTxset, 1, localPartyID, nil, common.MoneroInitTransfer)
+						err = tKeySign.packAndSend(responseTransfer.MultisigTxSet, 1, localPartyID, nil, common.MoneroInitTransfer)
 						if err != nil {
 							// fixme notify the failure of keysign
 							tKeySign.logger.Error().Err(err).Msg("fail to send the initialization transfer info")

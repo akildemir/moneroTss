@@ -7,11 +7,11 @@ import (
 	"testing"
 	"time"
 
+	moneroWallet "github.com/haven-protocol-org/go-haven-rpc-client/wallet"
 	"github.com/libp2p/go-libp2p-core/peer"
 	tnet "github.com/libp2p/go-libp2p-testing/net"
 	mocknet "github.com/libp2p/go-libp2p/p2p/net/mock"
 	"github.com/stretchr/testify/assert"
-	moneroWallet "gitlab.com/thorchain/tss/monero-wallet-rpc/wallet"
 
 	"github.com/akildemir/moneroTss/conversion"
 	"github.com/akildemir/moneroTss/p2p"

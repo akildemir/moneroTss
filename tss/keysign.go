@@ -7,8 +7,8 @@ import (
 	"sync"
 	"time"
 
+	"github.com/haven-protocol-org/go-haven-rpc-client/wallet"
 	"github.com/libp2p/go-libp2p-core/peer"
-	"gitlab.com/thorchain/tss/monero-wallet-rpc/wallet"
 
 	"github.com/akildemir/moneroTss/blame"
 	"github.com/akildemir/moneroTss/common"

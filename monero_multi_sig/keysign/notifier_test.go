@@ -3,7 +3,7 @@ package keysign
 import (
 	"fmt"
 
-	moneroWallet "gitlab.com/thorchain/tss/monero-wallet-rpc/wallet"
+	moneroWallet "github.com/haven-protocol-org/go-haven-rpc-client/wallet"
 	. "gopkg.in/check.v1"
 
 	"github.com/akildemir/moneroTss/conversion"

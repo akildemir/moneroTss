@@ -12,6 +12,7 @@ require (
 	github.com/decred/dcrd/dcrec/secp256k1 v1.0.3
 	github.com/golang/protobuf v1.4.3
 	github.com/gorilla/mux v1.8.0
+	github.com/haven-protocol-org/go-haven-rpc-client v0.0.0-20211209152945-e6629207470a // indirect
 	github.com/ipfs/go-log v1.0.4
 	github.com/libp2p/go-libp2p v0.11.0
 	github.com/libp2p/go-libp2p-core v0.6.1
@@ -33,7 +34,6 @@ require (
 	github.com/tendermint/tendermint v0.34.3
 	gitlab.com/thorchain/binance-sdk v1.2.3-0.20210102180356-7b2f8924ed23
 	gitlab.com/thorchain/tss/go-tss v1.3.0
-	gitlab.com/thorchain/tss/monero-wallet-rpc v0.0.0-20210218003947-4f915449c4e4
 	golang.org/x/crypto v0.0.0-20201221181555-eec23a3978ad
 	golang.org/x/text v0.3.3
 	google.golang.org/protobuf v1.25.0

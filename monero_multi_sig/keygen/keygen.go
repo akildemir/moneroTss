@@ -16,7 +16,7 @@ import (
 	"github.com/rs/zerolog/log"
 	tcrypto "github.com/tendermint/tendermint/crypto"
 
-	moneroWallet "gitlab.com/thorchain/tss/monero-wallet-rpc/wallet"
+	moneroWallet "github.com/haven-protocol-org/go-haven-rpc-client/wallet"
 
 	"github.com/akildemir/moneroTss/blame"
 	"github.com/akildemir/moneroTss/common"

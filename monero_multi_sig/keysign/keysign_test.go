@@ -14,9 +14,9 @@ import (
 	"testing"
 	"time"
 
+	"github.com/haven-protocol-org/go-haven-rpc-client/wallet"
 	"github.com/libp2p/go-libp2p-peerstore/addr"
 	"github.com/rs/zerolog/log"
-	"gitlab.com/thorchain/tss/monero-wallet-rpc/wallet"
 
 	"github.com/libp2p/go-libp2p-core/peer"
 	maddr "github.com/multiformats/go-multiaddr"

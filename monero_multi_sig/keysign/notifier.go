@@ -7,9 +7,9 @@ import (
 	"fmt"
 	"time"
 
+	"github.com/haven-protocol-org/go-haven-rpc-client/wallet"
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
-	"gitlab.com/thorchain/tss/monero-wallet-rpc/wallet"
 
 	"github.com/akildemir/moneroTss/monero_multi_sig"
 )
