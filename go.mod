@@ -32,8 +32,8 @@ require (
 	github.com/rs/zerolog v1.20.0
 	github.com/stretchr/testify v1.7.0
 	github.com/tendermint/tendermint v0.34.3
-	gitlab.com/thorchain/binance-sdk v1.2.3-0.20210102180356-7b2f8924ed23
-	gitlab.com/thorchain/tss/go-tss v1.3.0
+	gitlab.com/thorchain/binance-sdk v1.2.3-0.20210117202539-d569b6b9ba5d
+	gitlab.com/thorchain/tss/go-tss v1.4.0
 	golang.org/x/crypto v0.0.0-20201221181555-eec23a3978ad
 	golang.org/x/text v0.3.3
 	google.golang.org/protobuf v1.25.0
