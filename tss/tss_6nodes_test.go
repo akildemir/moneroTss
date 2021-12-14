@@ -16,6 +16,7 @@ import (
 
 	btsskeygen "github.com/binance-chain/tss-lib/ecdsa/keygen"
 	"github.com/haven-protocol-org/go-haven-rpc-client/wallet"
+	"github.com/libp2p/go-libp2p-peerstore/addr"
 	maddr "github.com/multiformats/go-multiaddr"
 	"github.com/rs/zerolog/log"
 	. "gopkg.in/check.v1"
@@ -24,6 +25,8 @@ import (
 	"github.com/akildemir/moneroTss/conversion"
 	"github.com/akildemir/moneroTss/monero_multi_sig/keygen"
 	"github.com/akildemir/moneroTss/monero_multi_sig/keysign"
+	"github.com/akildemir/moneroTss/p2p"
+	"github.com/akildemir/moneroTss/storage"
 )
 
 const (
@@ -232,7 +235,20 @@ func (s *FourNodeTestSuite) getTssServer(c *C, index int, conf common.TssConfig,
 	} else {
 		peerIDs = nil
 	}
-	instance, err := NewTss(peerIDs, s.ports[index], priKey, "Asgard", baseHome, conf, s.preParams[0], "")
+	// set up tss comms
+	stateManager, err := storage.NewFileStateMgr(baseHome)
+	c.Assert(err, IsNil)
+	var bootstrapPeers addr.AddrList
+	savedPeers, err := stateManager.RetrieveP2PAddresses()
+	if err != nil {
+		bootstrapPeers = peerIDs
+	} else {
+		bootstrapPeers = savedPeers
+		bootstrapPeers = append(bootstrapPeers, peerIDs...)
+	}
+	comm, err := p2p.NewCommunication("Asgard", bootstrapPeers, s.ports[index], "")
+	c.Assert(err, IsNil)
+	instance, err := NewTss(comm, priKey, baseHome, conf, s.preParams[index])
 	c.Assert(err, IsNil)
 	return instance
 }

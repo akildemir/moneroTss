@@ -11,7 +11,6 @@ import (
 	coskey "github.com/cosmos/cosmos-sdk/crypto/keys/secp256k1"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/libp2p/go-libp2p-core/peer"
-	"github.com/libp2p/go-libp2p-peerstore/addr"
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
 	tcrypto "github.com/tendermint/tendermint/crypto"
@@ -44,14 +43,11 @@ type TssServer struct {
 
 // NewTss create a new instance of Tss
 func NewTss(
-	cmdBootstrapPeers addr.AddrList,
-	p2pPort int,
+	comm *p2p.Communication,
 	priKey tcrypto.PrivKey,
-	rendezvous,
 	baseFolder string,
 	conf common.TssConfig,
 	preParams *bkeygen.LocalPreParams,
-	externalIP string,
 ) (*TssServer, error) {
 	pk := coskey.PubKey{
 		Key: priKey.PubKey().Bytes()[:],
@@ -65,19 +61,6 @@ func NewTss(
 	stateManager, err := storage.NewFileStateMgr(baseFolder)
 	if err != nil {
 		return nil, fmt.Errorf("fail to create file state manager")
-	}
-
-	var bootstrapPeers addr.AddrList
-	savedPeers, err := stateManager.RetrieveP2PAddresses()
-	if err != nil {
-		bootstrapPeers = cmdBootstrapPeers
-	} else {
-		bootstrapPeers = savedPeers
-		bootstrapPeers = append(bootstrapPeers, cmdBootstrapPeers...)
-	}
-	comm, err := p2p.NewCommunication(rendezvous, bootstrapPeers, p2pPort, externalIP)
-	if err != nil {
-		return nil, fmt.Errorf("fail to create communication layer: %w", err)
 	}
 
 	priKeyRawBytes, err := conversion.GetPriKeyRawBytes(priKey)
