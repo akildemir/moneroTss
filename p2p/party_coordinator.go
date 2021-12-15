@@ -17,7 +17,7 @@ import (
 
 	"github.com/akildemir/moneroTss/conversion"
 
-	origmsg "gitlab.com/thorchain/tss/go-tss/messages"
+	origmsg "github.com/akildemir/go-tss/messages"
 )
 
 var (

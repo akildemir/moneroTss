@@ -3,6 +3,7 @@ module github.com/akildemir/moneroTss
 go 1.14
 
 require (
+	github.com/akildemir/go-tss v0.0.0-20211214111608-4a9e15716350
 	github.com/binance-chain/tss-lib v0.0.0-20201118045712-70b2cb4bf916
 	github.com/blang/semver v3.5.1+incompatible
 	github.com/btcsuite/btcd v0.21.0-beta
@@ -33,7 +34,6 @@ require (
 	github.com/stretchr/testify v1.7.0
 	github.com/tendermint/tendermint v0.34.3
 	gitlab.com/thorchain/binance-sdk v1.2.3-0.20210117202539-d569b6b9ba5d
-	gitlab.com/thorchain/tss/go-tss v1.4.0
 	golang.org/x/crypto v0.0.0-20201221181555-eec23a3978ad
 	golang.org/x/text v0.3.3
 	google.golang.org/protobuf v1.25.0

@@ -17,8 +17,8 @@ import (
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
 
+	origmsg "github.com/akildemir/go-tss/messages"
 	"github.com/akildemir/moneroTss/p2p"
-	origmsg "gitlab.com/thorchain/tss/go-tss/messages"
 )
 
 var signatureNotifierProtocol protocol.ID = "/p2p/signatureNotifier"
