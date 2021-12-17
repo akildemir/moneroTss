@@ -45,7 +45,7 @@ func NewPartyCoordinator(host host.Host, timeout time.Duration) *PartyCoordinato
 		timeout = 10 * time.Second
 	}
 	pc := &PartyCoordinator{
-		logger:             log.With().Str("module", "party_coordinator").Logger(),
+		logger:             log.With().Str("module", "party_coordinator_mn").Logger(),
 		host:               host,
 		stopChan:           make(chan struct{}),
 		timeout:            timeout,

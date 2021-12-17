@@ -47,7 +47,7 @@ func NewNotifier(messageID string, encodedAddress string, client wallet.Client, 
 		resp:           make(chan *MoneroSpendProof, 1),
 		walletClient:   client,
 		txSend:         &txSend,
-		logger:         log.With().Str("module", "signature notifier").Logger(),
+		logger:         log.With().Str("module", "signature notifier Mn").Logger(),
 		threshold:      threshold,
 	}, nil
 }

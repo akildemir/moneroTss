@@ -24,7 +24,7 @@ type Manager struct {
 
 func NewBlameManager() *Manager {
 	return &Manager{
-		logger:          log.With().Str("module", "blame_manager").Logger(),
+		logger:          log.With().Str("module", "blame_manager_mn").Logger(),
 		partyInfo:       nil,
 		PartyIDtoP2PID:  make(map[string]peer.ID),
 		lastUnicastPeer: make(map[string][]peer.ID),

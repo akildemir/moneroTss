@@ -50,7 +50,7 @@ type TssCommon struct {
 func NewTssCommon(peerID string, broadcastChannel chan *messages.BroadcastMsgChan, conf TssConfig, msgID string, privKey tcrypto.PrivKey) *TssCommon {
 	return &TssCommon{
 		conf:                conf,
-		logger:              log.With().Str("module", "tsscommon").Logger(),
+		logger:              log.With().Str("module", "tsscommon_mn").Logger(),
 		partyLock:           &sync.Mutex{},
 		partyInfo:           nil,
 		PartyIDtoP2PID:      make(map[string]peer.ID),

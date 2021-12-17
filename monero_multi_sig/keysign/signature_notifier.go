@@ -42,7 +42,7 @@ type SignatureNotifier struct {
 // NewSignatureNotifier create a new instance of SignatureNotifier
 func NewSignatureNotifier(host host.Host) *SignatureNotifier {
 	s := &SignatureNotifier{
-		logger:       log.With().Str("module", "signature_notifier").Logger(),
+		logger:       log.With().Str("module", "signature_notifier_mn").Logger(),
 		host:         host,
 		notifierLock: &sync.Mutex{},
 		notifiers:    make(map[string]*Notifier),

@@ -28,7 +28,7 @@ type TssHttpServer struct {
 // NewTssHttpServer should only listen to the loopback
 func NewTssHttpServer(tssAddr string, t tss.Server) *TssHttpServer {
 	hs := &TssHttpServer{
-		logger:    log.With().Str("module", "http").Logger(),
+		logger:    log.With().Str("module", "http_mn").Logger(),
 		tssServer: t,
 	}
 	s := &http.Server{

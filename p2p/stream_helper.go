@@ -34,7 +34,7 @@ func NewStreamMgr() *StreamMgr {
 	return &StreamMgr{
 		unusedStreams: make(map[string][]network.Stream),
 		streamLocker:  &sync.RWMutex{},
-		logger:        log.With().Str("module", "communication").Logger(),
+		logger:        log.With().Str("module", "communication_mn").Logger(),
 	}
 }
 
