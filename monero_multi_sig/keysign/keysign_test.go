@@ -197,7 +197,7 @@ func (s *TssKeysignTestSuite) TestSignMessage(c *C) {
 	for i := 0; i < s.partyNum; i++ {
 		var rpcaddress string
 		rpcaddress = fmt.Sprintf("http://%s:18083/json_rpc", remoteAddress[i])
-		req := NewRequest(10, testPubKeys[:4], "0.16.0", rpcaddress, encodedTx)
+		req := NewRequest("", 10, testPubKeys[:4], "0.16.0", rpcaddress, encodedTx)
 		reqs = append(reqs, req)
 	}
 
@@ -316,9 +316,9 @@ func (s *TssKeysignTestSuite) TestSignMessageCheckFailure(c *C) {
 		rpcaddress = fmt.Sprintf("http://%s:18083/json_rpc", remoteAddress[i])
 		var req Request
 		if i == 1 {
-			req = NewRequest(10, testPubKeys[:4], "0.16.0", rpcaddress, encodedTx2)
+			req = NewRequest("", 10, testPubKeys[:4], "0.16.0", rpcaddress, encodedTx2)
 		} else {
-			req = NewRequest(10, testPubKeys[:4], "0.16.0", rpcaddress, encodedTx)
+			req = NewRequest("", 10, testPubKeys[:4], "0.16.0", rpcaddress, encodedTx)
 		}
 		reqs = append(reqs, req)
 	}

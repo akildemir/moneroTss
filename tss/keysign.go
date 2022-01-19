@@ -240,6 +240,11 @@ func (t *TssServer) KeySign(req keysign.Request) (keysign.Response, error) {
 		t.partyCoordinator.ReleaseStream(msgID)
 	}()
 
+	localStateItem, err := t.stateManager.GetLocalState(req.PoolPubKey)
+	if err != nil {
+		return emptyResp, fmt.Errorf("fail to get local keygen state: %w", err)
+	}
+
 	oldJoinParty, err := conversion.VersionLTCheck(req.Version, messages.NEWJOINPARTYVERSION)
 	if err != nil {
 		return keysign.Response{
@@ -292,7 +297,7 @@ func (t *TssServer) KeySign(req keysign.Request) (keysign.Response, error) {
 	// we generate the signature ourselves
 	go func() {
 		defer wg.Done()
-		generatedSig, errGen = t.generateSignature(msgID, req, threshold, req.SignerPubKeys, blameMgr, keysignInstance, sigChan)
+		generatedSig, errGen = t.generateSignature(msgID, req, threshold, localStateItem.ParticipantKeys, blameMgr, keysignInstance, sigChan)
 	}()
 	wg.Wait()
 	close(sigChan)

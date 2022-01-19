@@ -187,7 +187,7 @@ func (s *FourNodeTestSuite) doTestKeySign(c *C, amount uint64) {
 	for i := 0; i < partyNum; i++ {
 		wg.Add(1)
 		go func(idx int) {
-			keysignReq := keysign.NewRequest(10, testPubKeys, "0.14.0", s.rpcAddress[idx], encodedTx)
+			keysignReq := keysign.NewRequest("", 10, testPubKeys, "0.14.0", s.rpcAddress[idx], encodedTx)
 			defer wg.Done()
 			res, err := s.servers[idx].KeySign(keysignReq)
 			c.Assert(err, IsNil)
@@ -340,7 +340,7 @@ func (s *FourNodeTestSuite) doTestKeySignBlame(c *C) {
 	for i := 0; i < partyNum-2; i++ {
 		wg.Add(1)
 		go func(idx int) {
-			keySignReq := keysign.NewRequest(10, testPubKeys, "0.14.0", s.rpcAddress[idx], encodedTx)
+			keySignReq := keysign.NewRequest("", 10, testPubKeys, "0.14.0", s.rpcAddress[idx], encodedTx)
 			defer wg.Done()
 			res, err := s.servers[idx].KeySign(keySignReq)
 			c.Assert(err, NotNil)
