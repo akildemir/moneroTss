@@ -382,6 +382,8 @@ github.com/haven-protocol-org/go-haven-rpc-client v0.0.0-20211130094717-7131fe85
 github.com/haven-protocol-org/go-haven-rpc-client v0.0.0-20211130094717-7131fe858606/go.mod h1:orqw3vu8Y12DsIXx9CuVGbSH4wKoOvU5DwOu4jxqiSg=
 github.com/haven-protocol-org/go-haven-rpc-client v0.0.0-20211209152945-e6629207470a h1:1FoKZVYh8j6t9oAZN6Jju4N4x2dHgk+Q2NLvmdaXmzE=
 github.com/haven-protocol-org/go-haven-rpc-client v0.0.0-20211209152945-e6629207470a/go.mod h1:orqw3vu8Y12DsIXx9CuVGbSH4wKoOvU5DwOu4jxqiSg=
+github.com/haven-protocol-org/go-haven-rpc-client v0.0.0-20220125170735-6825bb255008 h1:BUcHeZuafRphreFVGN5JCQw9CK1L8jIwhb0ILzZk/MU=
+github.com/haven-protocol-org/go-haven-rpc-client v0.0.0-20220125170735-6825bb255008/go.mod h1:orqw3vu8Y12DsIXx9CuVGbSH4wKoOvU5DwOu4jxqiSg=
 github.com/hpcloud/tail v1.0.0 h1:nfCOvKYfkgYP8hkirhJocXT2+zOD8yUNjXaWfTlyFKI=
 github.com/hpcloud/tail v1.0.0/go.mod h1:ab1qPbhIpdTxEkNHXyeSf5vhxWSCs/tWer42PpOxQnU=
 github.com/hudl/fargo v1.3.0/go.mod h1:y3CKSmjA+wD2gak7sUSXTAoopbhU08POFhmITJgmKTg=

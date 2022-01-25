@@ -304,6 +304,7 @@ func (tKeySign *MoneroKeySign) SignMessage(encodedTx string, parties []string) (
 
 	balanceReq := moneroWallet.RequestGetBalance{
 		AccountIndex: 0,
+		AssetType:    txSend.AssetType,
 	}
 	// we check whether we have enough fund to transfer
 	var totalAmount uint64
@@ -331,7 +332,7 @@ func (tKeySign *MoneroKeySign) SignMessage(encodedTx string, parties []string) (
 		if balance.UnlockedBalance > totalAmount {
 			tKeySign.logger.Info().Msgf("unlock balance is %v with height %d\n", balance.UnlockedBalance, height.Height)
 			totalConfirmed += 1
-			if totalAmount > 3 {
+			if totalConfirmed > 3 {
 				break
 			}
 		}
