@@ -21,7 +21,7 @@ import (
 	"github.com/akildemir/moneroTss/p2p"
 )
 
-var signatureNotifierProtocol protocol.ID = "/p2p/signatureNotifier"
+var signatureNotifierProtocol protocol.ID = "/p2p/monero-tss/signatureNotifier"
 
 type signatureItem struct {
 	messageID string
