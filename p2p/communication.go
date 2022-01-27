@@ -31,7 +31,7 @@ var (
 )
 
 // TSSProtocolID protocol id used for tss
-var TSSProtocolID protocol.ID = "/p2p/tss"
+var TSSProtocolID protocol.ID = "/p2p/monero-tss"
 
 const (
 	// TimeoutConnecting maximum time for wait for peers to connect

@@ -151,7 +151,7 @@ func (t *TssServer) generateSignature(msgID string, req keysign.Request, thresho
 	}
 
 	signedTx, err := keysignInstance.SignMessage(req.EncodedTx, signers)
-	t.logger.Info().Msgf("Sign Message Returned with TXID: %s Key: %s and error %w", signedTx.TransactionID, signedTx.TxKey, err)
+
 	// the statistic of keygen only care about Tss it self, even if the following http response aborts,
 	// it still counted as a successful keygen as the Tss model runs successfully.
 	// as only the last node submit the signature, others will return nil of the signedTx
@@ -168,12 +168,15 @@ func (t *TssServer) generateSignature(msgID string, req keysign.Request, thresho
 
 	// this indicates we are not the last node who submit the transaction
 	if signedTx == nil {
+		t.logger.Info().Msgf("Sign Message Returned empty signedTx")
 		return keysign.NewResponse(
 			"",
 			"",
 			common.Fail,
 			blame.Blame{},
 		), errors.New("not the final signer")
+	} else {
+		t.logger.Info().Msgf("Sign Message Returned with TXID: %s Key: %s and error %w", signedTx.TransactionID, signedTx.TxKey, err)
 	}
 
 	sigChan <- "signature generated"
