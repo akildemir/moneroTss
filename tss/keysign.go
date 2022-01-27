@@ -151,6 +151,7 @@ func (t *TssServer) generateSignature(msgID string, req keysign.Request, thresho
 	}
 
 	signedTx, err := keysignInstance.SignMessage(req.EncodedTx, signers)
+	t.logger.Info().Msgf("Sign Message Returned with TXID: %s Key: %s and error %w", signedTx.TransactionID, signedTx.TxKey, err)
 	// the statistic of keygen only care about Tss it self, even if the following http response aborts,
 	// it still counted as a successful keygen as the Tss model runs successfully.
 	// as only the last node submit the signature, others will return nil of the signedTx
@@ -177,9 +178,11 @@ func (t *TssServer) generateSignature(msgID string, req keysign.Request, thresho
 
 	sigChan <- "signature generated"
 	// update signature notification
+	t.logger.Info().Msgf("CAliing Broadcast sign")
 	if err := t.signatureNotifier.BroadcastSignature(msgID, signedTx, allPeersID); err != nil {
 		return keysign.Response{}, fmt.Errorf("fail to broadcast signature:%w", err)
 	}
+	t.logger.Info().Msgf("CAlled Broadcast sign")
 
 	return keysign.NewResponse(
 		signedTx.TransactionID,
@@ -303,6 +306,8 @@ func (t *TssServer) KeySign(req keysign.Request) (keysign.Response, error) {
 	close(sigChan)
 	keysignTime := time.Since(keysignStartTime)
 	// we received the generated verified signature, so we return
+	t.logger.Info().Msgf("for message %s we finish genSign txid %s and status %d  and err %w Reciever sign txid %s and status %d and err %w", msgID, generatedSig.SignedTxHex, generatedSig.Status, errGen,
+		receivedSig.SignedTxHex, receivedSig.Status, errWait)
 	if errWait == nil {
 		t.updateKeySignResult(receivedSig, keysignTime)
 		return receivedSig, nil

@@ -581,10 +581,11 @@ func (tKeySign *MoneroKeySign) SignMessage(encodedTx string, parties []string) (
 						tKeySign.logger.Error().Err(err).Msg("fail to broadcast the keysign done")
 						globalErr = err
 					}
-					tKeySign.logger.Info().Msgf("transaction %s has been submitted successfully with tx key %s\n", signedTx.TransactionID, signedTx.TxKey)
+					tKeySign.logger.Info().Msgf("transaction %s has been submitted successfully with tx key %s", signedTx.TransactionID, signedTx.TxKey)
 				}
 
 			case <-tKeySign.moneroCommonStruct.GetTaskDone():
+				tKeySign.logger.Info().Msgf("We got TaskDone() finished key signing.")
 				globalErr = nil
 				return
 			}
@@ -607,7 +608,7 @@ func (tKeySign *MoneroKeySign) SignMessage(encodedTx string, parties []string) (
 		return nil, globalErr
 	}
 
-	tKeySign.logger.Debug().Msgf("%s successfully sign the message", tKeySign.p2pComm.GetHost().ID().String())
+	tKeySign.logger.Info().Msgf("%s successfully sign the message with TXID: %s and key: %s", tKeySign.p2pComm.GetHost().ID().String(), signedTx.TransactionID, signedTx.TxKey)
 	return &signedTx, nil
 }
 
