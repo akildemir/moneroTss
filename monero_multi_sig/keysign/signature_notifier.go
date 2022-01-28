@@ -132,7 +132,7 @@ func (s *SignatureNotifier) sendOneMsgToPeer(m *signatureItem) error {
 		if err != nil {
 			return fmt.Errorf("fail to marshal signature data to bytes:%w", err)
 		}
-		ks.Signatures[0] = serialSignedTx
+		ks.Signatures = append(ks.Signatures, serialSignedTx)
 		ks.KeysignStatus = origmsg.KeysignSignature_Success
 	}
 	ksBuf, err := proto.Marshal(ks)
