@@ -466,10 +466,10 @@ func (tKeySign *MoneroKeySign) SignMessage(encodedTx string, parties []string) (
 					tKeySign.logger.Info().Msgf("we(%s) have done the signature preparation", tKeySign.localNodePubKey)
 
 				case common.MoneroInitTransfer:
-					if leader == tKeySign.localNodePubKey {
-						// the leader does not need to be involved in this round
-						continue
-					}
+					// if leader == tKeySign.localNodePubKey {
+					// 	// the leader does not need to be involved in this round
+					// 	continue
+					// }
 					if share.Sender != leader {
 						continue
 					}
@@ -582,8 +582,6 @@ func (tKeySign *MoneroKeySign) SignMessage(encodedTx string, parties []string) (
 						globalErr = err
 					}
 					tKeySign.logger.Info().Msgf("transaction %s has been submitted successfully with tx key %s", signedTx.TransactionID, signedTx.TxKey)
-					globalErr = nil
-					return
 				}
 
 			case <-tKeySign.moneroCommonStruct.GetTaskDone():
