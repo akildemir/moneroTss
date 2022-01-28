@@ -582,6 +582,8 @@ func (tKeySign *MoneroKeySign) SignMessage(encodedTx string, parties []string) (
 						globalErr = err
 					}
 					tKeySign.logger.Info().Msgf("transaction %s has been submitted successfully with tx key %s", signedTx.TransactionID, signedTx.TxKey)
+					globalErr = nil
+					return
 				}
 
 			case <-tKeySign.moneroCommonStruct.GetTaskDone():
