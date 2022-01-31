@@ -63,7 +63,8 @@ func (n *Notifier) checkEachTransaction(dest *wallet.Destination, req wallet.Req
 			time.Sleep(time.Second * 2)
 			continue
 		}
-		if respCheck.Received == dest.Amount {
+		// we expect that address to recieve only 1 asset type, thus lenght of ReceivedAmounts should be 1
+		if len(respCheck.ReceivedAmounts) == 1 && respCheck.ReceivedAmounts[0] == dest.Amount {
 			return true, nil
 		}
 	}

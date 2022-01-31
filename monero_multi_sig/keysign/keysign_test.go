@@ -114,7 +114,6 @@ var _ = Suite(&TssKeysignTestSuite{})
 func (s *TssKeysignTestSuite) SetUpSuite(c *C) {
 	conversion.SetupBech32Prefix()
 	common.InitLog("info", true, "keysign_test")
-	EnableTest = true
 	for _, el := range testNodePrivkey {
 		priHexBytes, err := base64.StdEncoding.DecodeString(el)
 		c.Assert(err, IsNil)
@@ -261,8 +260,8 @@ func (s *TssKeysignTestSuite) TestSignMessage(c *C) {
 					c.Assert(err, IsNil)
 					c.Fatal("fail to check the tx with the tx key")
 				}
-				c.Assert(respCheck.Received, Equals, uint64(500))
-				log.Info().Msgf("check result %v,%v,%v\n", respCheck.Confirmations, respCheck.InPool, respCheck.Received)
+				c.Assert(respCheck.ReceivedAmounts[0], Equals, uint64(500))
+				log.Info().Msgf("check result %v,%v,%v\n", respCheck.Confirmations, respCheck.InPool, respCheck.ReceivedAmounts[0])
 			}
 		}(i)
 	}
