@@ -175,16 +175,12 @@ func (t *TssServer) generateSignature(msgID string, req keysign.Request, thresho
 			common.Fail,
 			blame.Blame{},
 		), errors.New("not the final signer")
-	} else {
-		t.logger.Info().Msgf("Sign Message Returned with TXID: %s Key: %s and error %w", signedTx.TransactionID, signedTx.TxKey, err)
 	}
 
 	// update signature notification
-	t.logger.Info().Msgf("CAliing Broadcast sign")
 	if err := t.signatureNotifier.BroadcastSignature(msgID, signedTx, allPeersID); err != nil {
 		return keysign.Response{}, fmt.Errorf("fail to broadcast signature:%w", err)
 	}
-	t.logger.Info().Msgf("CAlled Broadcast sign")
 
 	return keysign.NewResponse(
 		signedTx.TransactionID,
@@ -308,8 +304,6 @@ func (t *TssServer) KeySign(req keysign.Request) (keysign.Response, error) {
 	close(sigChan)
 	keysignTime := time.Since(keysignStartTime)
 	// we received the generated verified signature, so we return
-	t.logger.Info().Msgf("for message %s we finish genSign txid %s and status %d  and err %w Reciever sign txid %s and status %d and err %w", msgID, generatedSig.SignedTxHex, generatedSig.Status, errGen,
-		receivedSig.SignedTxHex, receivedSig.Status, errWait)
 	if errWait == nil {
 		t.updateKeySignResult(receivedSig, keysignTime)
 		return receivedSig, nil

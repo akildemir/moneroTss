@@ -500,9 +500,7 @@ func (tKeySign *MoneroKeySign) SignMessage(encodedTx string, parties []string) (
 					}
 
 					myShare = ret.TxDataHex
-					tKeySign.logger.Info().Msgf("Calling packandSend() from MoneroInitTransfer")
 					err = tKeySign.packAndSend(myShare, 1, localPartyID, nil, common.MoneroSignShares)
-					tKeySign.logger.Info().Msgf("Called packandSend() from MoneroInitTransfer with err %v", err)
 					if err != nil {
 						tKeySign.logger.Error().Err(err).Msgf("fail to send the message")
 						err = tKeySign.moneroCommonStruct.NotifyTaskDone()
@@ -517,13 +515,10 @@ func (tKeySign *MoneroKeySign) SignMessage(encodedTx string, parties []string) (
 					var ready bool
 					var shares []*common.MoneroShare
 					if isLeader {
-						tKeySign.logger.Info().Msgf("Leader Recieved a SignShare needToWait = %d", needToWait)
 						shares, ready = shareStore.StoreAndCheck(1, share, int(needToWait))
 					} else {
-						tKeySign.logger.Info().Msgf("We Recieved a SignShare needToWait = %d", needToWait)
 						shares, ready = shareStore.StoreAndCheck(1, share, int(needToWait-1))
 					}
-					tKeySign.logger.Info().Msgf("Store and check finished. Ready = %d", ready)
 					if !ready {
 						continue
 					}
@@ -584,7 +579,6 @@ func (tKeySign *MoneroKeySign) SignMessage(encodedTx string, parties []string) (
 				}
 
 			case <-tKeySign.moneroCommonStruct.GetTaskDone():
-				tKeySign.logger.Info().Msgf("We got TaskDone() finished key signing.")
 				globalErr = nil
 				return
 			}

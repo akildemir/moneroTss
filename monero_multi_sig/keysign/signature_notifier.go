@@ -93,7 +93,6 @@ func (s *SignatureNotifier) handleStream(stream network.Stream) {
 
 	n.threshold -= 1
 	finished, err := n.ProcessSignature(&signedTxHex)
-	logger.Info().Msgf("We are called process signature for signedTx %s and key %s and got finished %d and err %w", signedTxHex.TransactionID, signedTxHex.TxKey, finished, err)
 	if finished {
 		delete(s.notifiers, msg.ID)
 		return
