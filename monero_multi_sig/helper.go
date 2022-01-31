@@ -42,12 +42,14 @@ func (ms *MoneroSharesStore) StoreAndCheck(round int, share *common.MoneroShare,
 
 		shares = append(shares, share)
 		ms.shares[round] = shares
-		if len(shares) == checkLength {
-			return shares, true
-		}
-		return shares, false
+	} else {
+		ms.shares[round] = []*common.MoneroShare{share}
 	}
-	ms.shares[round] = []*common.MoneroShare{share}
+
+	if len(ms.shares[round]) == checkLength {
+		return ms.shares[round], true
+	}
+
 	return ms.shares[round], false
 }
 
