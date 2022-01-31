@@ -30,8 +30,6 @@ import (
 	"github.com/akildemir/moneroTss/storage"
 )
 
-var EnableTest = false
-
 type MoneroKeySign struct {
 	logger             zerolog.Logger
 	moneroCommonStruct *common.TssCommon
@@ -466,10 +464,10 @@ func (tKeySign *MoneroKeySign) SignMessage(encodedTx string, parties []string) (
 					tKeySign.logger.Info().Msgf("we(%s) have done the signature preparation", tKeySign.localNodePubKey)
 
 				case common.MoneroInitTransfer:
-					// if leader == tKeySign.localNodePubKey {
-					// 	// the leader does not need to be involved in this round
-					// 	continue
-					// }
+					if isLeader {
+						// the leader does not need to be involved in this round
+						continue
+					}
 					if share.Sender != leader {
 						continue
 					}
@@ -502,7 +500,9 @@ func (tKeySign *MoneroKeySign) SignMessage(encodedTx string, parties []string) (
 					}
 
 					myShare = ret.TxDataHex
+					tKeySign.logger.Info().Msgf("Calling packandSend() from MoneroInitTransfer")
 					err = tKeySign.packAndSend(myShare, 1, localPartyID, nil, common.MoneroSignShares)
+					tKeySign.logger.Info().Msgf("Called packandSend() from MoneroInitTransfer with err %v", err)
 					if err != nil {
 						tKeySign.logger.Error().Err(err).Msgf("fail to send the message")
 						err = tKeySign.moneroCommonStruct.NotifyTaskDone()
@@ -516,11 +516,14 @@ func (tKeySign *MoneroKeySign) SignMessage(encodedTx string, parties []string) (
 				case common.MoneroSignShares:
 					var ready bool
 					var shares []*common.MoneroShare
-					if tKeySign.localNodePubKey == leader {
+					if isLeader {
+						tKeySign.logger.Info().Msgf("Leader Recieved a SignShare needToWait = %d", needToWait)
 						shares, ready = shareStore.StoreAndCheck(1, share, int(needToWait))
 					} else {
+						tKeySign.logger.Info().Msgf("We Recieved a SignShare needToWait = %d", needToWait)
 						shares, ready = shareStore.StoreAndCheck(1, share, int(needToWait-1))
 					}
+					tKeySign.logger.Info().Msgf("Store and check finished. Ready = %d", ready)
 					if !ready {
 						continue
 					}
@@ -561,21 +564,17 @@ func (tKeySign *MoneroKeySign) SignMessage(encodedTx string, parties []string) (
 						return
 					}
 
-					if EnableTest {
-						signedTx.TxKey = "6283f00c65ddf91e3f28439f437abf983039284468fefaeaa16ecb6cd7492205"
-						signedTx.TransactionID = "549d0034f7799eecf7531d5311a3c8fee08eacc1fe964e791973a958d175b87a"
-					} else {
-						globalErr = tKeySign.submitAndGetConfirm(ret.TxDataHex, &signedTx)
-						if globalErr != nil {
-							tKeySign.logger.Error().Err(err).Msgf("fail to submit the transaction")
-							err = tKeySign.moneroCommonStruct.NotifyTaskDone()
-							if err != nil {
-								tKeySign.logger.Error().Err(err).Msg("fail to broadcast the keysign done")
-								globalErr = err
-							}
-							return
+					globalErr = tKeySign.submitAndGetConfirm(ret.TxDataHex, &signedTx)
+					if globalErr != nil {
+						tKeySign.logger.Error().Err(err).Msgf("fail to submit the transaction")
+						err = tKeySign.moneroCommonStruct.NotifyTaskDone()
+						if err != nil {
+							tKeySign.logger.Error().Err(err).Msg("fail to broadcast the keysign done")
+							globalErr = err
 						}
+						return
 					}
+
 					err = tKeySign.moneroCommonStruct.NotifyTaskDone()
 					if err != nil {
 						tKeySign.logger.Error().Err(err).Msg("fail to broadcast the keysign done")
