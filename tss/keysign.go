@@ -179,7 +179,6 @@ func (t *TssServer) generateSignature(msgID string, req keysign.Request, thresho
 		t.logger.Info().Msgf("Sign Message Returned with TXID: %s Key: %s and error %w", signedTx.TransactionID, signedTx.TxKey, err)
 	}
 
-	sigChan <- "signature generated"
 	// update signature notification
 	t.logger.Info().Msgf("CAliing Broadcast sign")
 	if err := t.signatureNotifier.BroadcastSignature(msgID, signedTx, allPeersID); err != nil {
