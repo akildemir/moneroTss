@@ -579,7 +579,6 @@ func (tKeySign *MoneroKeySign) SignMessage(encodedTx string, parties []string) (
 				}
 
 			case <-tKeySign.moneroCommonStruct.GetTaskDone():
-				globalErr = nil
 				return
 			}
 		}
