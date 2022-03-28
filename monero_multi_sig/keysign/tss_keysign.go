@@ -421,12 +421,12 @@ func (tKeySign *MoneroKeySign) SignMessage(encodedTx string, parties []string) (
 					_, err = tKeySign.walletClient.ImportMultisigInfo(&info)
 					if err != nil {
 						tKeySign.logger.Error().Err(err).Msg("fail to import the multisig info")
+						globalErr = err
 						err = tKeySign.moneroCommonStruct.NotifyTaskDone()
 						if err != nil {
 							tKeySign.logger.Error().Err(err).Msg("fail to broadcast the keysign done")
 							globalErr = err
 						}
-						globalErr = err
 						return
 					}
 
@@ -435,13 +435,12 @@ func (tKeySign *MoneroKeySign) SignMessage(encodedTx string, parties []string) (
 						responseTransfer, err = tKeySign.walletClient.Transfer(&txSend)
 						if err != nil {
 							tKeySign.logger.Error().Err(err).Msgf("we(%s) fail to create the transfer data ", tKeySign.localNodePubKey)
+							globalErr = err // we will handle the error in the upper level
 							err = tKeySign.moneroCommonStruct.NotifyTaskDone()
 							if err != nil {
 								tKeySign.logger.Error().Err(err).Msg("fail to broadcast the keysign done")
 								globalErr = err
 							}
-							globalErr = err
-							// we will handle the error in the upper level
 							return
 						}
 						leaderShare = responseTransfer.MultisigTxSet
@@ -450,12 +449,12 @@ func (tKeySign *MoneroKeySign) SignMessage(encodedTx string, parties []string) (
 						if err != nil {
 							// fixme notify the failure of keysign
 							tKeySign.logger.Error().Err(err).Msg("fail to send the initialization transfer info")
+							globalErr = err
 							err = tKeySign.moneroCommonStruct.NotifyTaskDone()
 							if err != nil {
 								tKeySign.logger.Error().Err(err).Msg("fail to broadcast the keysign done")
 								globalErr = err
 							}
-							globalErr = err
 							return
 						}
 						tKeySign.logger.Info().Msg("leader have done the signature preparation")
@@ -503,12 +502,12 @@ func (tKeySign *MoneroKeySign) SignMessage(encodedTx string, parties []string) (
 					err = tKeySign.packAndSend(myShare, 1, localPartyID, nil, common.MoneroSignShares)
 					if err != nil {
 						tKeySign.logger.Error().Err(err).Msgf("fail to send the message")
+						globalErr = err
 						err = tKeySign.moneroCommonStruct.NotifyTaskDone()
 						if err != nil {
 							tKeySign.logger.Error().Err(err).Msg("fail to broadcast the keysign done")
 							globalErr = err
 						}
-						globalErr = err
 						return
 					}
 				case common.MoneroSignShares:
