@@ -330,13 +330,13 @@ func (tKeySign *MoneroKeySign) SignMessage(encodedTx string, parties []string) (
 		if balance.UnlockedBalance > totalAmount {
 			tKeySign.logger.Info().Msgf("unlock balance is %v with height %d\n", balance.UnlockedBalance, height.Height)
 			totalConfirmed += 1
-			if totalConfirmed > 3 {
+			if totalConfirmed >= 3 {
 				break
 			}
 		}
 		tKeySign.logger.Warn().Msgf("fail to get the unlock balance, the wallet end may be slow")
 	}
-	if counter >= 10 {
+	if counter >= 10 && totalConfirmed == 0 {
 		return nil, errors.New("not enough fund in wallet")
 	}
 
