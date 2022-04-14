@@ -212,7 +212,7 @@ func (t *TssServer) KeySign(req keysign.Request) (keysign.Response, error) {
 		t.conf,
 		t.p2pCommunication.BroadcastMsgChan,
 		t.stopChan, msgID,
-		t.privateKey, t.p2pCommunication, req.RpcAddress)
+		t.privateKey, t.p2pCommunication, req.KeygenHeight, req.RpcAddress)
 	if err != nil {
 		t.logger.Error().Err(err).Msgf("fail to create the monero keysign instance")
 		return keysign.Response{}, err

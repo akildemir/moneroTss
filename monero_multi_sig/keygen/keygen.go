@@ -109,7 +109,7 @@ func (tKeyGen *MoneroKeyGen) GenerateNewKey(keygenReq Request) (string, string, 
 		Address: keygenReq.RpcAddress,
 	})
 
-	walletName := tKeyGen.localNodePubKey + ".mo"
+	walletName := tKeyGen.localNodePubKey + "-" + keygenReq.KeygenHeight + ".mo"
 	passcode := tKeyGen.GetTssCommonStruct().GetNodePrivKey()
 	walletDat := moneroWallet.RequestCreateWallet{
 		Filename: walletName,

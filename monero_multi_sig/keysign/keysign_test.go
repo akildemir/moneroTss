@@ -219,7 +219,7 @@ func (s *TssKeysignTestSuite) TestSignMessage(c *C) {
 				conf,
 				comm.BroadcastMsgChan,
 				stopChan, messageID,
-				s.nodePrivKeys[idx], s.comms[idx], reqs[idx].RpcAddress)
+				s.nodePrivKeys[idx], s.comms[idx], "", reqs[idx].RpcAddress)
 			c.Assert(err, IsNil)
 
 			defer func() {
@@ -341,7 +341,7 @@ func (s *TssKeysignTestSuite) TestSignMessageCheckFailure(c *C) {
 				conf,
 				comm.BroadcastMsgChan,
 				stopChan, messageID,
-				s.nodePrivKeys[idx], s.comms[idx], reqs[idx].RpcAddress)
+				s.nodePrivKeys[idx], s.comms[idx], "", reqs[idx].RpcAddress)
 			c.Assert(err, IsNil)
 
 			defer func() {

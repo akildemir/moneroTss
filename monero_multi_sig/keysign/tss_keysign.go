@@ -50,7 +50,7 @@ type MoneroSpendProof struct {
 func NewMoneroKeySign(localP2PID string,
 	conf common.TssConfig,
 	broadcastChan chan *messages.BroadcastMsgChan,
-	stopChan chan struct{}, msgID string, privKey tcrypto.PrivKey, p2pComm *p2p.Communication, rpcAddress string) (*MoneroKeySign, moneroWallet.Client, error) {
+	stopChan chan struct{}, msgID string, privKey tcrypto.PrivKey, p2pComm *p2p.Communication, keygenHeight, rpcAddress string) (*MoneroKeySign, moneroWallet.Client, error) {
 	logItems := []string{"keySign", msgID}
 
 	pk := coskey.PubKey{
@@ -72,7 +72,7 @@ func NewMoneroKeySign(localP2PID string,
 		walletClient:       moneroWallet.New(rpcWalletConfig),
 	}
 
-	walletName := pubKey + ".mo"
+	walletName := pubKey + "-" + keygenHeight + ".mo"
 	passcode := moneroSignClient.GetTssCommonStruct().GetNodePrivKey()
 	// now open the wallet
 	walletOpenReq := moneroWallet.RequestOpenWallet{

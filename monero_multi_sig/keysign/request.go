@@ -7,8 +7,9 @@ type Request struct {
 	Version       string   `json:"tss_version"`
 	PoolPubKey    string   `json:"pool_pub_key"` // pub key of the pool that we would like to send this message from
 	// these parameters are for monero
-	RpcAddress string `json:"rpc_address"`
-	EncodedTx  string `json:"encoded_transaction"`
+	RpcAddress   string `json:"rpc_address"`
+	EncodedTx    string `json:"encoded_transaction"`
+	KeygenHeight string `json:"keygen_height"`
 }
 
 func NewRequest(pk string, blockHeight int64, signers []string, version, rpCAddress, encodedTx string) Request {
