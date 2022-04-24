@@ -14,7 +14,7 @@ import (
 
 	btss "github.com/binance-chain/tss-lib/tss"
 	coskey "github.com/cosmos/cosmos-sdk/crypto/keys/secp256k1"
-	sdk "github.com/cosmos/cosmos-sdk/types"
+	sdk "github.com/cosmos/cosmos-sdk/types/bech32/legacybech32"
 	set "github.com/deckarep/golang-set"
 	moneroWallet "github.com/haven-protocol-org/go-haven-rpc-client/wallet"
 	"github.com/rs/zerolog"
@@ -63,7 +63,7 @@ func NewMoneroKeySign(localP2PID string,
 	}
 	moneroSignClient := MoneroKeySign{
 		logger:             log.With().Strs("module", logItems).Logger(),
-		localNodePubKey:    pubKey,
+		localNodePubKey:    bech32PubKey,
 		moneroCommonStruct: common.NewTssCommon(localP2PID, broadcastChan, conf, msgID, privKey),
 		stopChan:           stopChan,
 		localParty:         nil,
@@ -72,7 +72,7 @@ func NewMoneroKeySign(localP2PID string,
 		walletClient:       moneroWallet.New(rpcWalletConfig),
 	}
 
-	walletName := pubKey + "-" + keygenHeight + ".mo"
+	walletName := bech32PubKey + "-" + keygenHeight + ".mo"
 	passcode := moneroSignClient.GetTssCommonStruct().GetNodePrivKey()
 	// now open the wallet
 	walletOpenReq := moneroWallet.RequestOpenWallet{
