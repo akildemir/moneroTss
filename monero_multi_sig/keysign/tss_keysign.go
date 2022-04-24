@@ -56,7 +56,7 @@ func NewMoneroKeySign(localP2PID string,
 	pk := coskey.PubKey{
 		Key: privKey.PubKey().Bytes(),
 	}
-	pubKey, _ := sdk.Bech32ifyPubKey(sdk.Bech32PubKeyTypeAccPub, &pk)
+	bech32PubKey, _ := sdk.MarshalPubKey(sdk.AccPK, &pk)
 
 	rpcWalletConfig := moneroWallet.Config{
 		Address: rpcAddress,
