@@ -13,7 +13,7 @@ require (
 	github.com/decred/dcrd/dcrec/secp256k1 v1.0.3
 	github.com/golang/protobuf v1.4.3
 	github.com/gorilla/mux v1.8.0
-	github.com/haven-protocol-org/go-haven-rpc-client v0.0.0-20220210120456-ebe936d7475a // indirect
+	github.com/haven-protocol-org/go-haven-rpc-client v0.0.0-20220622125045-986219a60b46 // indirect
 	github.com/ipfs/go-log v1.0.4
 	github.com/libp2p/go-libp2p v0.11.0
 	github.com/libp2p/go-libp2p-core v0.6.1
