@@ -320,6 +320,7 @@ func (tKeySign *MoneroKeySign) SignMessage(encodedTx string, parties []string) (
 	if err != nil {
 		return nil, err
 	}
+	tKeySign.logger.Info().Msgf("Export multisig info data: %s", exportedMultisigInfo.Info)
 
 	exportedPubKeys, err := tKeySign.walletClient.ExportSigPubKey()
 	if err != nil {
@@ -378,7 +379,6 @@ func (tKeySign *MoneroKeySign) SignMessage(encodedTx string, parties []string) (
 						Info: multiSigInfo,
 					}
 					tKeySign.logger.Info().Msgf("importing multisig info data: %+q", multiSigInfo)
-					tKeySign.logger.Info().Msgf("passingf info: %+v", info)
 					_, err = tKeySign.walletClient.ImportMultisigInfo(&info)
 					if err != nil {
 						tKeySign.logger.Error().Err(err).Msg("fail to import the multisig info")
