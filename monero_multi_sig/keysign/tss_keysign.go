@@ -377,6 +377,8 @@ func (tKeySign *MoneroKeySign) SignMessage(encodedTx string, parties []string) (
 					info := moneroWallet.RequestImportMultisigInfo{
 						Info: multiSigInfo,
 					}
+					tKeySign.logger.Info().Msgf("importing multisig info data: %+q", multiSigInfo)
+					tKeySign.logger.Info().Msgf("passingf info: %+v", info)
 					_, err = tKeySign.walletClient.ImportMultisigInfo(&info)
 					if err != nil {
 						tKeySign.logger.Error().Err(err).Msg("fail to import the multisig info")
