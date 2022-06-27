@@ -9,7 +9,7 @@ import (
 )
 
 // since monero wallet is slow in synchronization, we need to have the retry
-const MoneroWalletRetry = 20
+const MoneroWalletRetry = 10
 
 type MoneroSharesStore struct {
 	shares map[int][]*common.MoneroShare

@@ -299,6 +299,46 @@ func (tKeySign *MoneroKeySign) SignMessage(encodedTx string, parties []string) (
 		tKeySign.logger.Error().Err(err).Msg("fail to unmarshal the transaction")
 		return nil, err
 	}
+
+	balanceReq := moneroWallet.RequestGetBalance{
+		AccountIndex: 0,
+		AssetType:    txSend.AssetType,
+	}
+	// we check whether we have enough fund to transfer
+	var totalAmount uint64
+	for _, el := range txSend.Destinations {
+		totalAmount += el.Amount
+	}
+	counter := 0
+	// because the monero wallet has high possibility to report incorrect balance when it is just opened,
+	// we need to see 3 confirmations of the balance
+	totalConfirmed := 0
+	for ; counter < monero_multi_sig.MoneroWalletRetry; counter++ {
+		time.Sleep(time.Second * 2)
+		balance, err := tKeySign.walletClient.GetBalance(&balanceReq)
+		if err != nil {
+			tKeySign.logger.Error().Err(err).Msg("fail to get the balance of the wallet")
+			return nil, err
+		}
+		height, err := tKeySign.walletClient.GetHeight()
+		if err != nil {
+			tKeySign.logger.Error().Err(err).Msg("fail to get the height of the wallet block")
+			return nil, err
+		}
+
+		// it fail still lack of fund as the fee is not added here
+		if balance.UnlockedBalance > totalAmount {
+			tKeySign.logger.Info().Msgf("unlock balance is %v with height %d\n", balance.UnlockedBalance, height.Height)
+			totalConfirmed += 1
+			if totalConfirmed >= 3 {
+				break
+			}
+		}
+		tKeySign.logger.Warn().Msgf("fail to meet the unlock balance, the wallet end may be slow")
+	}
+	if counter >= 10 && totalConfirmed == 0 {
+		return nil, errors.New("not enough fund in wallet")
+	}
 	threshold := walletInfo.Threshold
 	needToWait := threshold - 1 // we do not need to wait for ourselves
 
@@ -320,7 +360,6 @@ func (tKeySign *MoneroKeySign) SignMessage(encodedTx string, parties []string) (
 	if err != nil {
 		return nil, err
 	}
-	tKeySign.logger.Info().Msgf("Export multisig info data: %s", exportedMultisigInfo.Info)
 
 	exportedPubKeys, err := tKeySign.walletClient.ExportSigPubKey()
 	if err != nil {
@@ -378,7 +417,6 @@ func (tKeySign *MoneroKeySign) SignMessage(encodedTx string, parties []string) (
 					info := moneroWallet.RequestImportMultisigInfo{
 						Info: multiSigInfo,
 					}
-					tKeySign.logger.Info().Msgf("importing multisig info data: %+q", multiSigInfo)
 					_, err = tKeySign.walletClient.ImportMultisigInfo(&info)
 					if err != nil {
 						tKeySign.logger.Error().Err(err).Msg("fail to import the multisig info")
