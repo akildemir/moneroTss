@@ -43,6 +43,8 @@ github.com/akildemir/go-tss v0.0.0-20211214111608-4a9e15716350 h1:UnLSosDUPleUlq
 github.com/akildemir/go-tss v0.0.0-20211214111608-4a9e15716350/go.mod h1:KLY44wX4XxZXDb6WbuiV8g992qa5V6361tj8pAEapDI=
 github.com/akildemir/go-tss v0.0.0-20220617112844-4830c595e2ac h1:mdq+vmt7lgPrZY9rXeQnjDn19ky6iC7Dwqy9Wm3ExFQ=
 github.com/akildemir/go-tss v0.0.0-20220617112844-4830c595e2ac/go.mod h1:rvm9ak03WetcpAbv8NBMrLoLSZ1Gb0viSlnbRAcfZKE=
+github.com/akildemir/go-tss v0.0.0-20220916090103-282ec3c668d3 h1:915TdxD1zBym9Y23W9ubIGUVA86uHzJbZyweEkQH+E0=
+github.com/akildemir/go-tss v0.0.0-20220916090103-282ec3c668d3/go.mod h1:cv9zUHCg6celDZSyk2nWPyzkW+aCc0i7niyk7NU7XPw=
 github.com/alecthomas/template v0.0.0-20160405071501-a0175ee3bccc/go.mod h1:LOuyumcjzFXgccqObfd/Ljyb9UuFJ6TxHnclSeseNhc=
 github.com/alecthomas/template v0.0.0-20190718012654-fb15b899a751/go.mod h1:LOuyumcjzFXgccqObfd/Ljyb9UuFJ6TxHnclSeseNhc=
 github.com/alecthomas/units v0.0.0-20151022065526-2efee857e7cf/go.mod h1:ybxpYRFXyAe+OPACYpWeL0wqObRcbAqCMya13uyzqw0=

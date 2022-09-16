@@ -1,9 +1,9 @@
 module github.com/akildemir/moneroTss
 
-go 1.14
+go 1.17
 
 require (
-	github.com/akildemir/go-tss v0.0.0-20220617112844-4830c595e2ac
+	github.com/akildemir/go-tss v0.0.0-20220916090103-282ec3c668d3
 	github.com/binance-chain/tss-lib v0.0.0-20201118045712-70b2cb4bf916
 	github.com/blang/semver v3.5.1+incompatible
 	github.com/btcsuite/btcd v0.22.0-beta
