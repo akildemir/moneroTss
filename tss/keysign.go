@@ -8,7 +8,7 @@ import (
 	"time"
 
 	"github.com/haven-protocol-org/go-haven-rpc-client/wallet"
-	"github.com/libp2p/go-libp2p-core/peer"
+	"github.com/libp2p/go-libp2p/core/peer"
 
 	"github.com/akildemir/moneroTss/blame"
 	"github.com/akildemir/moneroTss/common"

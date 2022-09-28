@@ -8,8 +8,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/libp2p/go-libp2p-core/network"
-	"github.com/libp2p/go-libp2p-core/protocol"
+	"github.com/libp2p/go-libp2p/core/network"
+	"github.com/libp2p/go-libp2p/core/protocol"
 	"github.com/magiconair/properties/assert"
 )
 
@@ -43,6 +43,15 @@ func (m MockNetworkStream) Close() error {
 }
 
 func (m MockNetworkStream) Reset() error {
+	return nil
+}
+
+
+func (m MockNetworkStream) CloseRead() error {
+	return nil
+}
+
+func (m MockNetworkStream) CloseWrite() error {
 	return nil
 }
 
