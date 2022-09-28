@@ -16,6 +16,7 @@ import (
 	maddr "github.com/multiformats/go-multiaddr"
 
 	"github.com/akildemir/moneroTss/conversion"
+	"github.com/akildemir/moneroTss/p2p"
 )
 
 // KeygenLocalState is a structure used to represent the data we saved locally for different keygen
@@ -159,7 +160,7 @@ func (fsm *FileStateMgr) RetrieveP2PAddresses() (p2p.AddrList, error) {
 		if len(el) == 0 {
 			continue
 		}
-		addr, err := p2p.NewMultiaddr(el)
+		addr, err := maddr.NewMultiaddr(el)
 		if err != nil {
 			return nil, fmt.Errorf("invalid address in address book %w", err)
 		}
