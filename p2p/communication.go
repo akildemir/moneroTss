@@ -64,13 +64,13 @@ type Communication struct {
 
 // NewCommunication create a new instance of Communication
 func NewCommunication(rendezvous string, bootstrapPeers []Multiaddr, port int, externalIP string) (*Communication, error) {
-	addr, err := NewMultiaddr(fmt.Sprintf("/ip4/0.0.0.0/tcp/%d", port))
+	addr, err := maddr.NewMultiaddr(fmt.Sprintf("/ip4/0.0.0.0/tcp/%d", port))
 	if err != nil {
 		return nil, fmt.Errorf("fail to create listen addr: %w", err)
 	}
 	var externalAddr Multiaddr = nil
 	if len(externalIP) != 0 {
-		externalAddr, err = NewMultiaddr(fmt.Sprintf("/ip4/%s/tcp/%d", externalIP, port))
+		externalAddr, err = maddr.NewMultiaddr(fmt.Sprintf("/ip4/%s/tcp/%d", externalIP, port))
 		if err != nil {
 			return nil, fmt.Errorf("fail to create listen with given external IP: %w", err)
 		}
@@ -252,7 +252,7 @@ func (c *Communication) startChannel(privKeyBytes []byte) error {
 		return addrs
 	}
 
-	h, err := libp2p.New(ctx,
+	h, err := libp2p.New(
 		libp2p.ListenAddrs([]Multiaddr{c.listenAddr}...),
 		libp2p.Identity(p2pPriKey),
 		libp2p.AddrsFactory(addressFactory),
